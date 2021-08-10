@@ -1,0 +1,21 @@
+note over browser:
+browser is on the page https://studies.cs.helsinki.fi/exampleapp/notes
+
+the input field is filled and "Save" button is clicked
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note with the user's input
+server-->browser: 302 response with location "/exampleapp/notes"
+
+note over browser:
+browser follows the URL defined in location
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+server-->browser: HTML-code
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server-->browser: main.js
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [{"content":"Hello","date":"2021-08-07T17:52:23.344Z"}, ...]

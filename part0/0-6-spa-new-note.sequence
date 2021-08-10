@@ -1,0 +1,12 @@
+note over browser:
+browser is on the page https://studies.cs.helsinki.fi/exampleapp/spa
+
+the input field is filled and "Save" button is clicked
+end note
+
+note over browser:
+browser renders the note
+end note
+
+browser->server: XHR POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa with the user's input
+server-->browser: JSON Response {"message":"note created"}
