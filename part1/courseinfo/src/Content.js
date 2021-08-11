@@ -1,7 +1,11 @@
 import React from 'react';
 import Part from './Part';
 
-const Content = ({ parts: [part1, part2, part3] }) => {
+const Content = ({
+  course: {
+    parts: [part1, part2, part3],
+  },
+}) => {
   return (
     <>
       <Part part={part1} />
