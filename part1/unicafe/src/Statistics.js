@@ -3,20 +3,23 @@ import Statistic from './Statistic';
 
 const Statistics = ({ good, neutral, bad }) => {
   const all = good + neutral + bad;
-  const average = (good - bad) / all || 0;
-  const positive = `${(100 / all) * good || 0} %`;
+  const average = (good - bad) / all;
+  const positive = `${(100 / all) * good} %`;
 
-  return (
-    <>
-      <h2>statistics</h2>
-      <Statistic text="good" count={good} />
-      <Statistic text="neutral" count={neutral} />
-      <Statistic text="bad" count={bad} />
-      <Statistic text="all" count={all} />
-      <Statistic text="average" count={average} />
-      <Statistic text="positive" count={positive} />
-    </>
-  );
+  if (good || neutral || bad) {
+    return (
+      <>
+        <Statistic text="good" count={good} />
+        <Statistic text="neutral" count={neutral} />
+        <Statistic text="bad" count={bad} />
+        <Statistic text="all" count={all} />
+        <Statistic text="average" count={average} />
+        <Statistic text="positive" count={positive} />
+      </>
+    );
+  }
+
+  return 'No feedback given';
 };
 
 export default Statistics;
