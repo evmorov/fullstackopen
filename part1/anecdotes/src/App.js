@@ -29,12 +29,26 @@ const App = () => {
     setVotes(copy);
   };
 
+  let mostVoted = 0;
+  let mostVotes = 0;
+  for (const [anecdoteNumber, votesCount] of Object.entries(votes)) {
+    if (votesCount >= mostVotes) {
+      mostVoted = anecdoteNumber;
+      mostVotes = votesCount;
+    }
+  }
+
   return (
     <>
+      <h2>Anecdote of the day</h2>
       <div>{anecdotes[selected]}</div>
       <div>has {votes[selected] || 0} votes</div>
       <button onClick={setVote}>vote</button>
       <button onClick={setRandomSelected}>next anecdote</button>
+
+      <h2>Anecdote with most votes</h2>
+      <div>{anecdotes[mostVoted]}</div>
+      <div>has {mostVotes} votes</div>
     </>
   );
 };
