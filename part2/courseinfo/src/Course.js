@@ -10,7 +10,7 @@ const Course = ({ course }) => {
       <Content course={course} />
       <Total course={course} />
     </div>
-  )
-}
+  );
+};
 
 export default Course;
