@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import Filter from './Filter';
+import PersonForm from './PersonForm';
+import Persons from './Persons';
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -25,6 +28,18 @@ const App = () => {
     }
   };
 
+  const handleFilterChange = (event) => {
+    setFilterWord(event.target.value);
+  };
+
+  const handleNameChange = (event) => {
+    setNewName(event.target.value);
+  };
+
+  const handlePhoneChange = (event) => {
+    setNewPhone(event.target.value);
+  };
+
   const filteredPersons = persons.filter((person) =>
     person.name.toLowerCase().includes(filterWord.toLowerCase()),
   );
@@ -32,36 +47,19 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with:{' '}
-        <input value={filterWord} onChange={(e) => setFilterWord(e.target.value)} />
-      </div>
+      <Filter filterWord={filterWord} onChange={handleFilterChange} />
 
-      <h2>add a new</h2>
+      <h3>Add a new</h3>
+      <PersonForm
+        onSubmit={addPerson}
+        nameValue={newName}
+        phoneValue={newPhone}
+        onNameChange={handleNameChange}
+        onPhoneChange={handlePhoneChange}
+      />
 
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={(e) => setNewName(e.target.value)} />
-        </div>
-        <div>
-          phone: <input value={newPhone} onChange={(e) => setNewPhone(e.target.value)} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-
-      <h2>Numbers</h2>
-      <table>
-        <tbody>
-          {filteredPersons.map((person) => (
-            <tr key={person.name}>
-              <td>{person.name}</td>
-              <td>{person.phone}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <h3>Numbers</h3>
+      <Persons persons={filteredPersons} />
     </div>
   );
 };
