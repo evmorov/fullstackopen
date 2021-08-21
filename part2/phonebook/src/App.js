@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Filter from './Filter';
 import PersonForm from './PersonForm';
 import Persons from './Persons';
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', phone: '040-123456' },
-    { name: 'Ada Lovelace', phone: '39-44-5323523' },
-    { name: 'Dan Abramov', phone: '12-43-234345' },
-    { name: 'Mary Poppendieck', phone: '39-23-6423122' },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
-  const [newPhone, setNewPhone] = useState('');
+  const [newNumber, setNewNumber] = useState('');
   const [filterWord, setFilterWord] = useState('');
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/persons').then((response) => {
+      setPersons(response.data);
+    });
+  }, []);
 
   const addPerson = (event) => {
     event.preventDefault();
@@ -22,9 +24,9 @@ const App = () => {
     if (nameAlreadyExist) {
       alert(`${newName} is already added to phonebook`);
     } else {
-      setPersons([...persons, { name: newName, phone: newPhone }]);
+      setPersons([...persons, { name: newName, number: newNumber }]);
       setNewName('');
-      setNewPhone('');
+      setNewNumber('');
     }
   };
 
@@ -36,8 +38,8 @@ const App = () => {
     setNewName(event.target.value);
   };
 
-  const handlePhoneChange = (event) => {
-    setNewPhone(event.target.value);
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value);
   };
 
   const filteredPersons = persons.filter((person) =>
@@ -53,9 +55,9 @@ const App = () => {
       <PersonForm
         onSubmit={addPerson}
         nameValue={newName}
-        phoneValue={newPhone}
+        numberValue={newNumber}
         onNameChange={handleNameChange}
-        onPhoneChange={handlePhoneChange}
+        onNumberChange={handleNumberChange}
       />
 
       <h3>Numbers</h3>
