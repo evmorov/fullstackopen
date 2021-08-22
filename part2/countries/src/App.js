@@ -7,6 +7,7 @@ import Filter from './Filter';
 function App() {
   const [countries, setCountries] = useState([]);
   const [countryFilter, setCountryFilter] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
   useEffect(() => {
     axios.get('https://restcountries.eu/rest/v2/all').then((response) => {
@@ -14,22 +15,26 @@ function App() {
     });
   }, []);
 
-  const onCountrySeachChange = (event) => {
+  const onCountryFilterChange = (event) => {
     setCountryFilter(event.target.value);
+    setSelectedCountry(null);
   };
 
   const filteredCountries = countries.filter((country) =>
     country.name.toLowerCase().includes(countryFilter.toLowerCase()),
   );
 
+  const onlyCountry =
+    selectedCountry || (filteredCountries.length === 1 ? filteredCountries[0] : null);
+
   return (
     <>
-      <Filter filterValue={countryFilter} onFilterChange={onCountrySeachChange} />
+      <Filter filterValue={countryFilter} onFilterChange={onCountryFilterChange} />
 
-      {filteredCountries.length === 1 ? (
-        <Country country={filteredCountries[0]} />
+      {onlyCountry ? (
+        <Country country={onlyCountry} />
       ) : (
-        <CountryList countries={filteredCountries} />
+        <CountryList countries={filteredCountries} onShowClick={setSelectedCountry} />
       )}
     </>
   );
