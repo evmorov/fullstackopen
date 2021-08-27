@@ -38,6 +38,15 @@ const App = () => {
     });
   };
 
+  const deletePerson = (id) => {
+    const toDelete = persons.find((person) => person.id === id);
+    if (!window.confirm(`Delete ${toDelete.name}?`)) return;
+
+    personService.destroy(id).then(() => {
+      setPersons(persons.filter((person) => person !== toDelete));
+    });
+  };
+
   const handleFilterChange = (event) => {
     setFilterWord(event.target.value);
   };
@@ -69,7 +78,7 @@ const App = () => {
       />
 
       <h3>Numbers</h3>
-      <Persons persons={filteredPersons} />
+      <Persons persons={filteredPersons} onPersonDelete={deletePerson} />
     </div>
   );
 };

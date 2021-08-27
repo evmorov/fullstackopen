@@ -1,9 +1,12 @@
 import React from 'react';
 
-const Person = ({ person }) => (
-  <tr key={person.name}>
-    <td>{person.name}</td>
-    <td>{person.number}</td>
+const Person = ({ person: { id, name, number }, onDeleteClick }) => (
+  <tr key={id}>
+    <td>{name}</td>
+    <td>{number}</td>
+    <td>
+      <button onClick={onDeleteClick}>delete</button>
+    </td>
   </tr>
 );
 
