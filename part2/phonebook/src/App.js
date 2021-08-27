@@ -23,11 +23,19 @@ const App = () => {
     const nameAlreadyExist = persons.find((person) => person.name === newName);
     if (nameAlreadyExist) {
       alert(`${newName} is already added to phonebook`);
-    } else {
-      setPersons([...persons, { name: newName, number: newNumber }]);
+      return;
+    }
+
+    const personObject = {
+      name: newName,
+      number: newNumber,
+    };
+
+    axios.post('http://localhost:3001/persons', personObject).then((response) => {
+      setPersons(persons.concat(response.data));
       setNewName('');
       setNewNumber('');
-    }
+    });
   };
 
   const handleFilterChange = (event) => {
