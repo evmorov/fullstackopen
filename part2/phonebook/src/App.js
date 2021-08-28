@@ -20,19 +20,34 @@ const App = () => {
     event.preventDefault();
     if (!newName) return;
 
-    const nameAlreadyExist = persons.find((person) => person.name === newName);
-    if (nameAlreadyExist) {
-      alert(`${newName} is already added to phonebook`);
-      return;
-    }
-
     const personObject = {
       name: newName,
       number: newNumber,
     };
 
+    const persistedPerson = persons.find((person) => person.name === newName);
+    if (persistedPerson) {
+      replacePhone(persistedPerson, personObject);
+      return;
+    }
+
     personService.create(personObject).then((returnedPerson) => {
       setPersons(persons.concat(returnedPerson));
+      setNewName('');
+      setNewNumber('');
+    });
+  };
+
+  const replacePhone = (persistedPerson, personObject) => {
+    const confirmReplaceMessage = `${persistedPerson.name} is already added to phonebook, replace the old number with a new one?`;
+    if (!window.confirm(confirmReplaceMessage)) return;
+
+    updatePerson(persistedPerson.id, personObject);
+  };
+
+  const updatePerson = (id, personObject) => {
+    personService.update(id, personObject).then((returnedPerson) => {
+      setPersons(persons.map((p) => (p.id === id ? returnedPerson : p)));
       setNewName('');
       setNewNumber('');
     });
