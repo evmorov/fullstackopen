@@ -1,6 +1,23 @@
-const Notification = ({ message }) => {
+const Notification = ({ notification: { message, type } }) => {
+  if (!message) return null;
+
+  const notificationColor = () => {
+    let color = 'lightgrey';
+    switch (type) {
+      case 'info':
+        color = 'green';
+        break;
+      case 'error':
+        color = 'red';
+        break;
+      default:
+        console.error(`Unkown notification type ${type}`);
+    }
+    return color;
+  };
+
   const notificationStyle = {
-    color: 'green',
+    color: notificationColor(),
     background: 'lightgrey',
     fontSize: '20px',
     borderStyle: 'solid',
@@ -8,10 +25,6 @@ const Notification = ({ message }) => {
     padding: '10px',
     marginBottom: '10px',
   };
-
-  if (message === null) {
-    return null;
-  }
 
   return <div style={notificationStyle}>{message}</div>;
 };

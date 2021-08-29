@@ -10,7 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filterWord, setFilterWord] = useState('');
-  const [notificationMessage, setNotificationMessage] = useState(null);
+  const [notification, setNotification] = useState({});
 
   useEffect(() => {
     personService.getAll().then((initialPersons) => {
@@ -18,9 +18,14 @@ const App = () => {
     });
   }, []);
 
-  const showNotification = (message) => {
-    setNotificationMessage(message);
-    setTimeout(() => setNotificationMessage(null), 5000);
+  const showInfo = (message) => {
+    setNotification({ message, type: 'info' });
+    setTimeout(() => setNotification({}), 2000);
+  };
+
+  const showError = (message) => {
+    setNotification({ message, type: 'error' });
+    setTimeout(() => setNotification({}), 2000);
   };
 
   const addPerson = (event) => {
@@ -42,7 +47,7 @@ const App = () => {
       setPersons(persons.concat(returnedPerson));
       setNewName('');
       setNewNumber('');
-      showNotification(`Added ${returnedPerson.name}`);
+      showInfo(`Added ${returnedPerson.name}`);
     });
   };
 
@@ -51,7 +56,7 @@ const App = () => {
     if (!window.confirm(confirmReplaceMessage)) return;
 
     updatePerson(persistedPerson.id, personObject).then(() => {
-      showNotification(`Updated ${persistedPerson.name}`);
+      showInfo(`Updated ${persistedPerson.name}`);
     });
   };
 
@@ -67,10 +72,15 @@ const App = () => {
     const toDelete = persons.find((person) => person.id === id);
     if (!window.confirm(`Delete ${toDelete.name}?`)) return;
 
-    return personService.destroy(id).then(() => {
-      setPersons(persons.filter((person) => person !== toDelete));
-      showNotification(`Deleted ${toDelete.name}`);
-    });
+    return personService
+      .destroy(id)
+      .then(() => {
+        setPersons(persons.filter((person) => person !== toDelete));
+        showInfo(`Deleted ${toDelete.name}`);
+      })
+      .catch((error) => {
+        showError(`Information of ${toDelete.name} has already beed removed from server`);
+      });
   };
 
   const handleFilterChange = (event) => {
@@ -92,7 +102,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notificationMessage} />
+      <Notification notification={notification} />
       <Filter filterWord={filterWord} onChange={handleFilterChange} />
 
       <h3>Add a new</h3>
