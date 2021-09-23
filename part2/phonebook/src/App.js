@@ -20,12 +20,12 @@ const App = () => {
 
   const showInfo = (message) => {
     setNotification({ message, type: 'info' });
-    setTimeout(() => setNotification({}), 2000);
+    setTimeout(() => setNotification({}), 3000);
   };
 
   const showError = (message) => {
     setNotification({ message, type: 'error' });
-    setTimeout(() => setNotification({}), 2000);
+    setTimeout(() => setNotification({}), 4000);
   };
 
   const addPerson = (event) => {
@@ -43,21 +43,30 @@ const App = () => {
       return;
     }
 
-    return personService.create(personObject).then((returnedPerson) => {
-      setPersons(persons.concat(returnedPerson));
-      setNewName('');
-      setNewNumber('');
-      showInfo(`Added ${returnedPerson.name}`);
-    });
+    personService
+      .create(personObject)
+      .then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName('');
+        setNewNumber('');
+        showInfo(`Added ${returnedPerson.name}`);
+      })
+      .catch((error) => {
+        showError(error.response.data.error);
+      });
   };
 
   const replacePhone = (persistedPerson, personObject) => {
     const confirmReplaceMessage = `${persistedPerson.name} is already added to phonebook, replace the old number with a new one?`;
     if (!window.confirm(confirmReplaceMessage)) return;
 
-    updatePerson(persistedPerson.id, personObject).then(() => {
-      showInfo(`Updated ${persistedPerson.name}`);
-    });
+    updatePerson(persistedPerson.id, personObject)
+      .then(() => {
+        showInfo(`Updated ${persistedPerson.name}`);
+      })
+      .catch((error) => {
+        showError(error.response.data.error);
+      });
   };
 
   const updatePerson = (id, personObject) => {
