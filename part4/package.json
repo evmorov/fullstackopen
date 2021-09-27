@@ -6,11 +6,13 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "format": "prettier --parser babel --write '**/*.js'",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "jest --verbose"
   },
   "license": "MIT",
   "devDependencies": {
     "eslint": "^7.32.0",
+    "jest": "^27.2.2",
     "nodemon": "^2.0.13",
     "prettier": "^2.4.1"
   },
@@ -20,5 +22,8 @@
     "express": "^4.17.1",
     "mongoose": "^6.0.7",
     "morgan": "^1.10.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
