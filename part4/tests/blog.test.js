@@ -28,6 +28,12 @@ describe('when there is initially some notes saved', () => {
 
     expect(response.body).toHaveLength(helper.initialBlogs.length);
   });
+
+  test('unique identifier of blogs', async () => {
+    const response = await api.get('/api/blogs');
+
+    expect(response.body[0].id).toBeDefined();
+  });
 });
 
 afterAll(() => {
