@@ -39,6 +39,8 @@ describe('when there is initially some notes saved', () => {
     const newBlog = {
       title: 'Title from test',
       author: 'Author from test',
+      url: 'https://google.com',
+      likes: 5
     };
 
     await api
@@ -52,6 +54,23 @@ describe('when there is initially some notes saved', () => {
 
     const titles = blogsAtEnd.map((b) => b.title);
     expect(titles).toContain('Title from test');
+  });
+
+  test('likes set to 0 if missing from the request', async () => {
+    const newBlog = {
+      title: 'Title from test',
+      author: 'Author from test',
+      url: 'https://google.com',
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd.pop().likes).toEqual(0);
   });
 });
 
