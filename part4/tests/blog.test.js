@@ -40,14 +40,10 @@ describe('when there is initially some notes saved', () => {
       title: 'Title from test',
       author: 'Author from test',
       url: 'https://google.com',
-      likes: 5
+      likes: 5,
     };
 
-    await api
-      .post('/api/blogs')
-      .send(newBlog)
-      .expect(201)
-      .expect('Content-Type', /application\/json/);
+    await api.post('/api/blogs').send(newBlog).expect(201);
 
     const blogsAtEnd = await helper.blogsInDb();
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
@@ -63,14 +59,22 @@ describe('when there is initially some notes saved', () => {
       url: 'https://google.com',
     };
 
-    await api
-      .post('/api/blogs')
-      .send(newBlog)
-      .expect(201)
-      .expect('Content-Type', /application\/json/);
+    await api.post('/api/blogs').send(newBlog);
 
     const blogsAtEnd = await helper.blogsInDb();
     expect(blogsAtEnd.pop().likes).toEqual(0);
+  });
+
+  test("doesn't create a blog if title and url are missing", async () => {
+    const newBlog = {
+      url: 'https://google.com',
+      likes: 5,
+    };
+
+    await api.post('/api/blogs').send(newBlog).expect(400);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
   });
 });
 
