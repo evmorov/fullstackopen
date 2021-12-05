@@ -1,4 +1,4 @@
-const listHelper = require('../utils/list_helper');
+const listHelper = require('../utils/list_helper')
 
 const blogs = [
   {
@@ -49,49 +49,49 @@ const blogs = [
     likes: 2,
     __v: 0,
   },
-];
+]
 
 test('dummy returns one', () => {
-  const blogs = [];
+  const blogs = []
 
-  const result = listHelper.dummy(blogs);
-  expect(result).toBe(1);
-});
+  const result = listHelper.dummy(blogs)
+  expect(result).toBe(1)
+})
 
 describe('totalLikes', () => {
   test('returns sum of likes', () => {
-    const result = listHelper.totalLikes(blogs);
-    expect(result).toBe(36);
-  });
-});
+    const result = listHelper.totalLikes(blogs)
+    expect(result).toBe(36)
+  })
+})
 
 describe('favoriteBlog', () => {
   test('returns blog with most likes', () => {
-    const result = listHelper.favoriteBlog(blogs);
+    const result = listHelper.favoriteBlog(blogs)
     expect(result).toEqual({
       title: 'Canonical string reduction',
       author: 'Edsger W. Dijkstra',
       likes: 12,
-    });
-  });
-});
+    })
+  })
+})
 
 describe('mostBlogs', () => {
   test('returns author with most blogs', () => {
-    const result = listHelper.mostBlogs(blogs);
+    const result = listHelper.mostBlogs(blogs)
     expect(result).toEqual({
       author: 'Robert C. Martin',
       blogs: 3,
-    });
-  });
-});
+    })
+  })
+})
 
 describe('mostLikes', () => {
   test('returns author with most likes', () => {
-    const result = listHelper.mostLikes(blogs);
+    const result = listHelper.mostLikes(blogs)
     expect(result).toEqual({
       author: 'Edsger W. Dijkstra',
       likes: 17,
-    });
-  });
-});
+    })
+  })
+})
