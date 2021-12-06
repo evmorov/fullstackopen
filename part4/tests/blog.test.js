@@ -5,14 +5,34 @@ const app = require('../app')
 const api = supertest(app)
 
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
+var token = null
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+  await User.deleteMany({})
 
   for (let blog of helper.initialBlogs) {
-    let blogObject = new Blog(blog)
-    await blogObject.save()
+    await new Blog(blog).save()
   }
+  for (let user of helper.initialUsers) {
+    await new User(user).save()
+  }
+
+  const user = helper.initialUsers[0]
+
+  const login = {
+    username: user.username,
+    password: 'Password',
+  }
+
+  const response = await api
+    .post('/api/login')
+    .set('Authorization', `Bearer ${token}`)
+    .send(login)
+    .expect(200)
+  token = response.body.token
 })
 
 describe('when there is initially some blogs saved', () => {
@@ -43,7 +63,7 @@ describe('when there is initially some blogs saved', () => {
       likes: 5,
     }
 
-    await api.post('/api/blogs').send(newBlog).expect(201)
+    await api.post('/api/blogs').set('Authorization', `Bearer ${token}`).send(newBlog).expect(201)
 
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
@@ -59,7 +79,7 @@ describe('when there is initially some blogs saved', () => {
       url: 'https://google.com',
     }
 
-    await api.post('/api/blogs').send(newBlog)
+    await api.post('/api/blogs').set('Authorization', `Bearer ${token}`).send(newBlog)
 
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd.pop().likes).toEqual(0)
@@ -71,7 +91,7 @@ describe('when there is initially some blogs saved', () => {
       likes: 5,
     }
 
-    await api.post('/api/blogs').send(newBlog).expect(400)
+    await api.post('/api/blogs').set('Authorization', `Bearer ${token}`).send(newBlog).expect(400)
 
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)

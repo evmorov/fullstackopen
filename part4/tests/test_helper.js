@@ -16,18 +16,13 @@ const initialBlogs = [
   },
 ]
 
-const nonExistingId = async () => {
-  const blog = new Blog({
-    title: 'Canonical string reduction',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
-    likes: 12,
-  })
-  await blog.save()
-  await blog.remove()
-
-  return blog._id.toString()
-}
+const initialUsers = [
+  {
+    username: 'evmorov',
+    name: 'Evgenii',
+    passwordHash: '$2b$10$xlTfH6iyvhHfLSIZrr3S9uqj86jlKCsyMrFl98PAPJPqC9eQzgLli',
+  },
+]
 
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
@@ -41,7 +36,7 @@ const usersInDb = async () => {
 
 module.exports = {
   initialBlogs,
-  nonExistingId,
+  initialUsers,
   blogsInDb,
   usersInDb,
 }
