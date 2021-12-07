@@ -22,6 +22,11 @@ const initialUsers = [
     name: 'Evgenii',
     passwordHash: '$2b$10$xlTfH6iyvhHfLSIZrr3S9uqj86jlKCsyMrFl98PAPJPqC9eQzgLli',
   },
+  {
+    username: 'anotherUsername',
+    name: 'anotherName',
+    passwordHash: '$2b$10$xlTfH6iyvhHfLSIZrr3S9uqj86jlKCsyMrFl98PAPJPqC9eQzgLli',
+  },
 ]
 
 const blogsInDb = async () => {

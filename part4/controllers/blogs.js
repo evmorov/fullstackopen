@@ -1,7 +1,5 @@
-const jwt = require('jsonwebtoken')
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../models/user')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
@@ -9,29 +7,25 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 blogsRouter.post('/', async (request, response, next) => {
+  const { body } = request
+
+  const currentUser = request.currentUser
+  if (!currentUser) {
+    return response.status(401).json({ error: 'Authorization is required' })
+  }
+
+  const blog = new Blog({
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes,
+    user: currentUser._id,
+  })
+
   try {
-    const body = request.body
-
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    if (!request.token || !decodedToken.id) {
-      return response.status(401).json({ error: 'token missing or invalid' })
-    }
-    const user = await User.findById(decodedToken.id)
-    if (!user) {
-      return response.status(401).json({ error: 'no user is found' })
-    }
-
-    const blog = new Blog({
-      title: body.title,
-      author: body.author,
-      url: body.url,
-      likes: body.likes,
-      user: user._id,
-    })
-
     const savedBlog = await blog.save()
-    user.blogs = user.blogs.concat(savedBlog._id)
-    await user.save()
+    currentUser.blogs = currentUser.blogs.concat(savedBlog._id)
+    await currentUser.save()
     response.status(201).json(savedBlog)
   } catch (exception) {
     next(exception)
@@ -54,8 +48,19 @@ blogsRouter.put('/:id', async (request, response, next) => {
 })
 
 blogsRouter.delete('/:id', async (request, response, next) => {
+  const currentUser = request.currentUser
+  if (!currentUser) {
+    return response.status(401).json({ error: 'Authorization is required' })
+  }
+
+  const blog = await Blog.findById(request.params.id)
+
+  if (blog.user.toString() !== currentUser._id.toString()) {
+    return response.status(403).json({ error: 'Forbidden' })
+  }
+
   try {
-    await Blog.findByIdAndRemove(request.params.id)
+    await blog.remove()
     response.status(204).end()
   } catch (exception) {
     next(exception)

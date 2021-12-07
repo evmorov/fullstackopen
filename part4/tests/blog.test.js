@@ -27,11 +27,7 @@ beforeEach(async () => {
     password: 'Password',
   }
 
-  const response = await api
-    .post('/api/login')
-    .set('Authorization', `Bearer ${token}`)
-    .send(login)
-    .expect(200)
+  const response = await api.post('/api/login').send(login).expect(200)
   token = response.body.token
 })
 
@@ -97,6 +93,20 @@ describe('when there is initially some blogs saved', () => {
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
   })
 
+  test("doesn't create a blog if authorization token is incorrect", async () => {
+    const newBlog = {
+      title: 'Title from test',
+      author: 'Author from test',
+      url: 'https://google.com',
+      likes: 5,
+    }
+
+    await api.post('/api/blogs').set('Authorization', 'Bearer incorrect').send(newBlog).expect(401)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+  })
+
   describe('updating of a blog', () => {
     test('success if id is valid', async () => {
       const blogsAtStart = await helper.blogsInDb()
@@ -117,19 +127,59 @@ describe('when there is initially some blogs saved', () => {
   })
 
   describe('deletion of a blog', () => {
-    test('success if id is valid', async () => {
+    beforeEach(async () => {
+      await Blog.deleteMany({})
+
+      const newBlog = {
+        title: 'Title from test',
+        author: 'Author from test',
+        url: 'https://google.com',
+        likes: 5,
+      }
+
+      await api.post('/api/blogs').set('Authorization', `Bearer ${token}`).send(newBlog).expect(201)
+    })
+
+    test('success if the owner of the blog', async () => {
       const blogsAtStart = await helper.blogsInDb()
       const blogToDelete = blogsAtStart[0]
 
-      await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
 
       const blogsAtEnd = await helper.blogsInDb()
 
-      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
+      expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
 
       const titles = blogsAtEnd.map((r) => r.content)
 
       expect(titles).not.toContain(blogToDelete.title)
+    })
+
+    test('fails if not the owner of the blog', async () => {
+      const anotherUser = helper.initialUsers[1]
+
+      const login = {
+        username: anotherUser.username,
+        password: 'Password',
+      }
+
+      const response = await api.post('/api/login').send(login).expect(200)
+      const anotherToken = response.body.token
+
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToDelete = blogsAtStart[0]
+
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('Authorization', `Bearer ${anotherToken}`)
+        .expect(403)
+
+      const blogsAtEnd = await helper.blogsInDb()
+
+      expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
     })
   })
 })

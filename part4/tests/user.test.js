@@ -108,7 +108,7 @@ describe('validation', () => {
       .send({
         username: 'Someusername',
         name: 'Somename',
-        password: 'Ab'
+        password: 'Ab',
       })
       .expect(400)
       .expect('Content-Type', /application\/json/)
