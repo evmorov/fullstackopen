@@ -115,7 +115,12 @@ describe('#create', () => {
 })
 
 describe('#update', () => {
-  test('success if id is valid', async () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    await api.post('/api/blogs').set('Authorization', `Bearer ${token}`).send(validBlog).expect(201)
+  })
+
+  test('success if the owner of the blog', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToUpdate = blogsAtStart[0]
     const likesAtStart = blogToUpdate.likes
@@ -124,7 +129,11 @@ describe('#update', () => {
       likes: 100,
     }
 
-    await api.put(`/api/blogs/${blogToUpdate.id}`).send(updatedBlog).expect(200)
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(updatedBlog)
+      .expect(200)
 
     const blogsAtEnd = await helper.blogsInDb()
     const blogUpdated = blogsAtEnd[0]
@@ -160,10 +169,7 @@ describe('#destroy', () => {
   test('fails if not the owner of the blog', async () => {
     const anotherUser = helper.initialUsers[1]
 
-    const login = {
-      username: anotherUser.username,
-      password: 'Password',
-    }
+    const login = { username: anotherUser.username, password: 'Password' }
 
     const response = await api.post('/api/login').send(login).expect(200)
     const anotherToken = response.body.token

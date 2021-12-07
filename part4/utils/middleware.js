@@ -2,7 +2,7 @@ const logger = require('./logger')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 
-const userExtractor = async (request, response, next) => {
+const requireCurrentUser = async (request, response, next) => {
   try {
     const authorization = request.get('authorization')
     if (!authorization || !authorization.toLowerCase().startsWith('bearer ')) {
@@ -39,7 +39,7 @@ const errorHandler = (error, request, response, next) => {
 }
 
 module.exports = {
-  userExtractor,
+  requireCurrentUser,
   unknownEndpoint,
   errorHandler,
 }

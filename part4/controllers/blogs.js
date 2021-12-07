@@ -1,13 +1,13 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
-const userExtractor = require('./../utils/middleware').userExtractor
+const requireCurrentUser = require('./../utils/middleware').requireCurrentUser
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   response.json(blogs)
 })
 
-blogsRouter.post('/', userExtractor, async (request, response, next) => {
+blogsRouter.post('/', requireCurrentUser, async (request, response, next) => {
   const { body, currentUser } = request
 
   const blog = new Blog({
@@ -22,18 +22,23 @@ blogsRouter.post('/', userExtractor, async (request, response, next) => {
     const savedBlog = await blog.save()
     currentUser.blogs = currentUser.blogs.concat(savedBlog._id)
     await currentUser.save()
-    response.status(201).json(savedBlog)
+    response.status(201).json(savedBlog).end()
   } catch (exception) {
     next(exception)
   }
 })
 
-blogsRouter.put('/:id', async (request, response, next) => {
-  const { body } = request
+blogsRouter.put('/:id', requireCurrentUser, async (request, response, next) => {
+  const { body, currentUser, params } = request
+
+  const blog = await Blog.findById(params.id)
+
+  if (blog.user.toString() !== currentUser._id.toString()) {
+    return response.status(403).end()
+  }
 
   try {
-    const updatedBlog = await Blog.findByIdAndUpdate(
-      request.params.id,
+    const updatedBlog = await blog.update(
       { likes: body.likes },
       { new: true, runValidators: true },
     )
@@ -43,13 +48,13 @@ blogsRouter.put('/:id', async (request, response, next) => {
   }
 })
 
-blogsRouter.delete('/:id', userExtractor, async (request, response, next) => {
-  const { currentUser } = request
+blogsRouter.delete('/:id', requireCurrentUser, async (request, response, next) => {
+  const { currentUser, params } = request
 
-  const blog = await Blog.findById(request.params.id)
+  const blog = await Blog.findById(params.id)
 
   if (blog.user.toString() !== currentUser._id.toString()) {
-    return response.status(403).json({ error: 'Forbidden' })
+    return response.status(403).end()
   }
 
   try {
