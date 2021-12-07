@@ -1,18 +1,14 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const userExtractor = require('./../utils/middleware').userExtractor
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response, next) => {
-  const { body } = request
-
-  const currentUser = request.currentUser
-  if (!currentUser) {
-    return response.status(401).json({ error: 'Authorization is required' })
-  }
+blogsRouter.post('/', userExtractor, async (request, response, next) => {
+  const { body, currentUser } = request
 
   const blog = new Blog({
     title: body.title,
@@ -47,11 +43,8 @@ blogsRouter.put('/:id', async (request, response, next) => {
   }
 })
 
-blogsRouter.delete('/:id', async (request, response, next) => {
-  const currentUser = request.currentUser
-  if (!currentUser) {
-    return response.status(401).json({ error: 'Authorization is required' })
-  }
+blogsRouter.delete('/:id', userExtractor, async (request, response, next) => {
+  const { currentUser } = request
 
   const blog = await Blog.findById(request.params.id)
 

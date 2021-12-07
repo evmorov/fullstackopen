@@ -2,16 +2,22 @@ const logger = require('./logger')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 
-const currentUser = async (request, response, next) => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    const token = authorization.substring(7)
-    try {
-      const decodedToken = jwt.verify(token, process.env.SECRET)
-      request.currentUser = await User.findById(decodedToken.id)
-    } catch (exception) {
-      logger.error(exception)
+const userExtractor = async (request, response, next) => {
+  try {
+    const authorization = request.get('authorization')
+    if (!authorization || !authorization.toLowerCase().startsWith('bearer ')) {
+      throw new Error('No authorization bearer token found')
     }
+    const token = authorization.substring(7)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    const user = await User.findById(decodedToken.id)
+    if (!user) {
+      throw new Error("User isn't found")
+    }
+    request.currentUser = user
+  } catch (exception) {
+    logger.error(exception)
+    return response.status(401).send({ error: 'Not authorized' })
   }
   next()
 }
@@ -33,7 +39,7 @@ const errorHandler = (error, request, response, next) => {
 }
 
 module.exports = {
-  currentUser,
+  userExtractor,
   unknownEndpoint,
   errorHandler,
 }
