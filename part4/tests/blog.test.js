@@ -127,7 +127,6 @@ describe('#create', () => {
 
 describe('#update', () => {
   beforeEach(async () => {
-    await Blog.deleteMany({})
     await api.post('/api/blogs').set('Authorization', `Bearer ${token}`).send(validBlog).expect(201)
   })
 
@@ -155,7 +154,6 @@ describe('#update', () => {
 
 describe('#destroy', () => {
   beforeEach(async () => {
-    await Blog.deleteMany({})
     await api.post('/api/blogs').set('Authorization', `Bearer ${token}`).send(validBlog).expect(201)
   })
 
