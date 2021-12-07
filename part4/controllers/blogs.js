@@ -38,7 +38,7 @@ blogsRouter.put('/:id', requireCurrentUser, async (request, response, next) => {
   }
 
   try {
-    const updatedBlog = await blog.update(
+    const updatedBlog = await blog.updateOne(
       { likes: body.likes },
       { new: true, runValidators: true },
     )

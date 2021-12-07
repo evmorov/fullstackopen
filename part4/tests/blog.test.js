@@ -13,9 +13,6 @@ beforeEach(async () => {
   await Blog.deleteMany({})
   await User.deleteMany({})
 
-  for (let blog of helper.initialBlogs) {
-    await new Blog(blog).save()
-  }
   for (let user of helper.initialUsers) {
     await new User(user).save()
   }
@@ -39,6 +36,12 @@ const validBlog = {
 }
 
 describe('#index', () => {
+  beforeEach(async () => {
+    for (let blog of helper.initialBlogs) {
+      await new Blog(blog).save()
+    }
+  })
+
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -61,10 +64,12 @@ describe('#index', () => {
 
 describe('#create', () => {
   test('a valid blog can be added', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+
     await api.post('/api/blogs').set('Authorization', `Bearer ${token}`).send(validBlog).expect(201)
 
     const blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length + 1)
 
     const titles = blogsAtEnd.map((b) => b.title)
     expect(titles).toContain('Title from test')
@@ -84,6 +89,8 @@ describe('#create', () => {
   })
 
   test("doesn't create a blog if title and url are missing", async () => {
+    const blogsAtStart = await helper.blogsInDb()
+
     const newBlog = {
       url: 'https://google.com',
       likes: 5,
@@ -92,10 +99,12 @@ describe('#create', () => {
     await api.post('/api/blogs').set('Authorization', `Bearer ${token}`).send(newBlog).expect(400)
 
     const blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
   })
 
   test("doesn't create a blog if authorization token is incorrect", async () => {
+    const blogsAtStart = await helper.blogsInDb()
+
     await api
       .post('/api/blogs')
       .set('Authorization', 'Bearer incorrect')
@@ -103,14 +112,16 @@ describe('#create', () => {
       .expect(401)
 
     const blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
   })
 
   test("doesn't create a blog if authorization token is missed", async () => {
+    const blogsAtStart = await helper.blogsInDb()
+
     await api.post('/api/blogs').send(validBlog).expect(401)
 
     const blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
   })
 })
 
