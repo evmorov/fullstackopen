@@ -8,14 +8,21 @@ usersRouter.get('/', async (request, response) => {
 })
 
 usersRouter.post('/', async (request, response, next) => {
-  const body = request.body
+  const { username, name, password } = request.body
+
+  const passwordRequredLength = 3
+  if (!password || password.length < passwordRequredLength) {
+    return response
+      .status(400)
+      .json({ error: `password must at least ${passwordRequredLength} chars long` })
+  }
 
   const saltRounds = 10
-  const passwordHash = await bcrypt.hash(body.password, saltRounds)
+  const passwordHash = await bcrypt.hash(password, saltRounds)
 
   const user = new User({
-    username: body.username,
-    name: body.name,
+    username: username,
+    name: name,
     passwordHash,
   })
 
