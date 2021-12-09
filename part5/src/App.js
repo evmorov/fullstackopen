@@ -83,7 +83,7 @@ const App = () => {
       setBlogTitle('')
       setBlogAuthor('')
       setBlogUrl('')
-      showInfo('Blog successfully created')
+      showInfo(`A new blog ${blogTitle} created`)
     } catch (exception) {
       showError(exception.response.data.error)
     }
