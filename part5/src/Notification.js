@@ -1,3 +1,5 @@
+import React from 'react'
+
 const Notification = ({ notification: { message, type } }) => {
   if (!message) return null
 
