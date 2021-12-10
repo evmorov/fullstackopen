@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
-import Notification from './Notification'
+import LoginForm from './components/LoginForm'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -89,32 +90,6 @@ const App = () => {
     }
   }
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        Username
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          autoComplete="username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        Password
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          autoComplete="current-password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
-  )
-
   const blogForm = () => (
     <form onSubmit={createBlog}>
       <div>
@@ -169,7 +144,6 @@ const App = () => {
           {blogForm()}
 
           <br />
-          <br />
 
           <table style={{ borderSpacing: '10px' }}>
             <thead>
@@ -187,7 +161,13 @@ const App = () => {
           </table>
         </div>
       ) : (
-        loginForm()
+        <LoginForm
+          handleSubmit={handleLogin}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          username={username}
+          password={password}
+        />
       )}
     </div>
   )
