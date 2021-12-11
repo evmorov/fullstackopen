@@ -94,26 +94,17 @@ const App = () => {
           <br />
           <br />
 
-          <Togglable buttonLabel="New blog" ref={toggleBlogFormRef}>
+          <Togglable showLabel="New blog" hideLabel="Cancel" ref={toggleBlogFormRef}>
             <BlogForm createBlog={createBlog} ref={blogFormRef} />
           </Togglable>
 
           <br />
 
-          <table style={{ borderSpacing: '10px' }}>
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Url</th>
-              </tr>
-            </thead>
-            <tbody>
-              {blogs.map((blog) => (
-                <Blog key={blog.id} blog={blog} />
-              ))}
-            </tbody>
-          </table>
+          <h3>List</h3>
+
+          {blogs.map((blog) => (
+            <Blog key={blog.id} blog={blog} />
+          ))}
         </div>
       ) : (
         <LoginForm

@@ -1,10 +1,19 @@
-import React from 'react'
-const Blog = ({ blog: { title, author, url } }) => (
-  <tr>
-    <td>{title}</td>
-    <td>{author}</td>
-    <td>{url}</td>
-  </tr>
-)
+import React, { useRef } from 'react'
+import Togglable from './Togglable'
+
+const Blog = ({ blog: { title, author, url } }) => {
+  const toggleDetailsRef = useRef()
+
+  return (
+    <div style={{ marginBottom: 10 }}>
+      <span>{title}</span>
+      {' '}
+      <Togglable showLabel="view" hideLabel="hide" ref={toggleDetailsRef}>
+        <div>{author}</div>
+        <div>{url}</div>
+      </Togglable>
+    </div>
+  )
+}
 
 export default Blog
