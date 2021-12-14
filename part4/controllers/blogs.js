@@ -38,11 +38,12 @@ blogsRouter.put('/:id', requireCurrentUser, async (request, response, next) => {
   }
 
   try {
-    const updatedBlog = await blog.updateOne(
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      params.id,
       { likes: body.likes },
       { new: true, runValidators: true },
     )
-    response.json(updatedBlog)
+    response.json(updatedBlog).end()
   } catch (exception) {
     next(exception)
   }
