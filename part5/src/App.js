@@ -64,17 +64,27 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.clear()
     setUser(null)
-    blogFormRef.current.clearForm()
+    blogFormRef.current && blogFormRef.current.clearForm()
     showInfo('Successfully logged out')
   }
 
   const createBlog = async (newBlog) => {
     try {
-      const returnedBlog = await blogService.create(newBlog)
+      const returnedBlog = await blogService.create(newBlog, handleLogout)
       setBlogs(blogs.concat(returnedBlog))
       showInfo(`A new blog ${returnedBlog.title} created`)
       blogFormRef.current.clearForm()
       toggleBlogFormRef.current.toggleVisibility()
+    } catch (exception) {
+      exception.response ? showError(exception.response.data.error) : console.error(exception)
+    }
+  }
+
+  const updateBlog = async (editedBlog) => {
+    const id = editedBlog.id
+    try {
+      const returnedBlog = await blogService.update(id, editedBlog, handleLogout)
+      setBlogs(blogs.map((blog) => (blog.id === id ? returnedBlog : blog)))
     } catch (exception) {
       exception.response ? showError(exception.response.data.error) : console.error(exception)
     }
@@ -103,7 +113,7 @@ const App = () => {
           <h3>List</h3>
 
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
           ))}
         </div>
       ) : (
