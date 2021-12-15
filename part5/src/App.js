@@ -71,7 +71,7 @@ const App = () => {
 
   const createBlog = async (newBlog) => {
     try {
-      const returnedBlog = await blogService.create(newBlog, handleLogout)
+      const returnedBlog = await blogService.create(newBlog)
       setBlogs(blogs.concat(returnedBlog))
       showInfo(`A new blog ${returnedBlog.title} created`)
       blogFormRef.current.clearForm()
@@ -84,7 +84,7 @@ const App = () => {
   const updateBlog = async (editedBlog) => {
     const id = editedBlog.id
     try {
-      const returnedBlog = await blogService.update(id, editedBlog, handleLogout)
+      const returnedBlog = await blogService.update(id, editedBlog)
       setBlogs(blogs.map((blog) => (blog.id === id ? returnedBlog : blog)))
     } catch (exception) {
       exception.response ? showError(exception.response.data.error) : console.error(exception)

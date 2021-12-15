@@ -13,27 +13,21 @@ const getAll = () => {
   return request.then((response) => response.data)
 }
 
-const create = async (newObject, onNonAuthorized) => {
+const create = async (newObject) => {
   const config = {
     headers: { Authorization: token },
   }
 
-  const response = await axios.post(baseUrl, newObject, config).catch((error) => {
-    if (error.response.status === 401) onNonAuthorized()
-    throw error
-  })
+  const response = await axios.post(baseUrl, newObject, config)
   return response.data
 }
 
-const update = async (id, updateObject, onNonAuthorized) => {
+const update = async (id, updateObject) => {
   const config = {
     headers: { Authorization: token },
   }
 
-  const response = await axios.put(`${baseUrl}/${id}`, updateObject, config).catch((error) => {
-    if (error.response.status === 401) onNonAuthorized()
-    throw error
-  })
+  const response = await axios.put(`${baseUrl}/${id}`, updateObject, config)
   return response.data
 }
 
