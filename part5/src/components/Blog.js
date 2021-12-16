@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import Togglable from './Togglable'
 
-const Blog = ({ blog: { title, author, url, likes }, blog, updateBlog }) => {
+const Blog = ({ blog: { title, author, url, likes }, blog, updateBlog, destroyBlog }) => {
   const toggleDetailsRef = useRef()
 
   const likeButtonStyle = {
@@ -10,11 +10,17 @@ const Blog = ({ blog: { title, author, url, likes }, blog, updateBlog }) => {
     cursor: 'pointer',
   }
 
-  const editBlog = (event) => {
+  const handleLike = (event) => {
     event.preventDefault()
     const editedBlog = { ...blog, likes: likes + 1 }
 
     updateBlog(editedBlog)
+  }
+
+  const handleRemove = (event) => {
+    event.preventDefault()
+
+    destroyBlog(blog)
   }
 
   return (
@@ -24,9 +30,10 @@ const Blog = ({ blog: { title, author, url, likes }, blog, updateBlog }) => {
         <div>{author}</div>
         <div>{url}</div>
         <span>Likes: {likes}</span>
-        <button style={likeButtonStyle} onClick={editBlog}>
+        <button style={likeButtonStyle} onClick={handleLike}>
           👍
         </button>
+        <button onClick={handleRemove}>Remove</button>
         <br />
       </Togglable>
     </div>

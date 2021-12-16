@@ -55,7 +55,7 @@ blogsRouter.delete('/:id', requireCurrentUser, async (request, response, next) =
   const blog = await Blog.findById(params.id)
 
   if (blog.user.toString() !== currentUser._id.toString()) {
-    return response.status(403).end()
+    return response.status(403).json({ error: 'Forbidden' }).end()
   }
 
   try {

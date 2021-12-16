@@ -69,9 +69,9 @@ const App = () => {
     showInfo('Successfully logged out')
   }
 
-  const createBlog = async (newBlog) => {
+  const createBlog = async (blog) => {
     try {
-      const returnedBlog = await blogService.create(newBlog)
+      const returnedBlog = await blogService.create(blog)
       setBlogs(blogs.concat(returnedBlog))
       showInfo(`A new blog ${returnedBlog.title} created`)
       blogFormRef.current.clearForm()
@@ -81,11 +81,22 @@ const App = () => {
     }
   }
 
-  const updateBlog = async (editedBlog) => {
-    const id = editedBlog.id
+  const updateBlog = async (blog) => {
+    const id = blog.id
     try {
-      const returnedBlog = await blogService.update(id, editedBlog)
-      setBlogs(blogs.map((blog) => (blog.id === id ? returnedBlog : blog)))
+      const returnedBlog = await blogService.update(id, blog)
+      setBlogs(blogs.map((b) => (b.id === id ? returnedBlog : b)))
+    } catch (exception) {
+      exception.response ? showError(exception.response.data.error) : console.error(exception)
+    }
+  }
+
+  const destroyBlog = async (blog) => {
+    const id = blog.id
+    try {
+      await blogService.destroy(id)
+      setBlogs(blogs.filter((blog) => blog.id !== id))
+      showInfo(`Blog ${blog.title} has been removed`)
     } catch (exception) {
       exception.response ? showError(exception.response.data.error) : console.error(exception)
     }
@@ -115,7 +126,7 @@ const App = () => {
 
           <h3>List</h3>
           {sortedBlogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} destroyBlog={destroyBlog} />
           ))}
         </div>
       ) : (
