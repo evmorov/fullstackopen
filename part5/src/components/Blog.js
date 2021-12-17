@@ -19,6 +19,7 @@ const Blog = ({ blog: { title, author, url, likes }, blog, updateBlog, destroyBl
 
   const handleRemove = (event) => {
     event.preventDefault()
+    window.confirm(`Remove blog ${title} by ${author}`)
 
     destroyBlog(blog)
   }
