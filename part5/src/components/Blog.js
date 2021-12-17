@@ -27,7 +27,7 @@ const Blog = ({ blog: { title, author, url, likes }, blog, updateBlog, destroyBl
   return (
     <div style={{ marginBottom: 10 }}>
       <span>{title}</span>{' '}
-      <Togglable showLabel="+" hideLabel="-" ref={toggleDetailsRef} hidePosition="top">
+      <Togglable showLabel="+" hideLabel="-" hidePosition="top" ref={toggleDetailsRef}>
         <div>{author}</div>
         <div>{url}</div>
         <span>Likes: {likes}</span>

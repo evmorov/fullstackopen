@@ -121,8 +121,8 @@ const App = () => {
           <Togglable
             showLabel="New blog"
             hideLabel="Cancel"
-            ref={toggleBlogFormRef}
             hidePosition="bottom"
+            ref={toggleBlogFormRef}
           >
             <BlogForm createBlog={createBlog} ref={blogFormRef} />
           </Togglable>
