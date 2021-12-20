@@ -26,16 +26,18 @@ const Blog = ({ blog: { title, author, url, likes, user }, blog, updateBlog, des
 
   return (
     <div style={{ marginBottom: 10 }}>
-      <span>
+      <span data-test="blog-main">
         {title}, {author}
       </span>{' '}
       <Togglable showLabel="+" hideLabel="-" hidePosition="top" ref={toggleDetailsRef}>
-        <div>{url}</div>
-        <span>Likes: {likes}</span>
-        <button style={likeButtonStyle} onClick={handleLike}>
-          👍
-        </button>
-        <div>Owner: {user.name}</div>
+        <div data-test="blog-extra">
+          <div>{url}</div>
+          <span>Likes: {likes}</span>
+          <button style={likeButtonStyle} onClick={handleLike}>
+            👍
+          </button>
+          <div>Owner: {user.name}</div>
+        </div>
         <div>
           <button onClick={handleRemove}>Remove</button>
         </div>
