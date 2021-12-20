@@ -22,7 +22,8 @@ blogsRouter.post('/', requireCurrentUser, async (request, response, next) => {
     const savedBlog = await blog.save()
     currentUser.blogs = currentUser.blogs.concat(savedBlog._id)
     await currentUser.save()
-    response.status(201).json(savedBlog).end()
+    const savedBlogWithUser = await savedBlog.populate('user', { username: 1, name: 1 })
+    response.status(201).json(savedBlogWithUser).end()
   } catch (exception) {
     next(exception)
   }
@@ -42,7 +43,7 @@ blogsRouter.put('/:id', requireCurrentUser, async (request, response, next) => {
       params.id,
       { likes: body.likes },
       { new: true, runValidators: true },
-    )
+    ).populate('user', { username: 1, name: 1 })
     response.json(updatedBlog).end()
   } catch (exception) {
     next(exception)
