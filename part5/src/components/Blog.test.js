@@ -5,7 +5,7 @@ import Blog from './Blog'
 
 describe('render', () => {
   let container = null
-  let updateBlogHandler = null
+  let updateBlog = null
 
   const title = 'TestTitle'
   const author = 'TestAuthor'
@@ -18,8 +18,8 @@ describe('render', () => {
 
   beforeEach(() => {
     const blog = { title, author, url, likes, user: { name: userName } }
-    updateBlogHandler = jest.fn()
-    container = render(<Blog blog={blog} updateBlog={updateBlogHandler} />).container
+    updateBlog = jest.fn()
+    container = render(<Blog blog={blog} updateBlog={updateBlog} />).container
   })
 
   test('title and author are visible', () => {
@@ -55,7 +55,7 @@ describe('render', () => {
     })
 
     test('calls event handler twice', () => {
-      expect(updateBlogHandler.mock.calls).toHaveLength(2)
+      expect(updateBlog.mock.calls).toHaveLength(2)
     })
   })
 })

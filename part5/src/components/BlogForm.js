@@ -38,6 +38,7 @@ const BlogForm = React.forwardRef(({ createBlog }, ref) => {
             value={blogTitle}
             name="BlogTitle"
             autoComplete="blogtitle"
+            data-test="blog-title-input"
             onChange={({ target }) => setBlogTitle(target.value)}
           />
         </div>
@@ -48,6 +49,7 @@ const BlogForm = React.forwardRef(({ createBlog }, ref) => {
             value={blogAuthor}
             name="BlogAuthor"
             autoComplete="blogauthor"
+            data-test="blog-author-input"
             onChange={({ target }) => setBlogAuthor(target.value)}
           />
         </div>
@@ -58,6 +60,7 @@ const BlogForm = React.forwardRef(({ createBlog }, ref) => {
             value={blogUrl}
             name="BlogUrl"
             autoComplete="blogurl"
+            data-test="blog-url-input"
             onChange={({ target }) => setBlogUrl(target.value)}
           />
         </div>
