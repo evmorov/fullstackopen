@@ -33,7 +33,7 @@ const Blog = ({ blog: { title, author, url, likes, user }, blog, updateBlog, des
         <div data-test="blog-extra">
           <div>{url}</div>
           <span>Likes: {likes}</span>
-          <button style={likeButtonStyle} onClick={handleLike}>
+          <button style={likeButtonStyle} data-test="blog-like-button" onClick={handleLike}>
             👍
           </button>
           <div>Owner: {user.name}</div>

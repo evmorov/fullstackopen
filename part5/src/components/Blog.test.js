@@ -5,6 +5,7 @@ import Blog from './Blog'
 
 describe('render', () => {
   let container = null
+  let updateBlogHandler = null
 
   const title = 'TestTitle'
   const author = 'TestAuthor'
@@ -17,7 +18,8 @@ describe('render', () => {
 
   beforeEach(() => {
     const blog = { title, author, url, likes, user: { name: userName } }
-    container = render(<Blog blog={blog} />).container
+    updateBlogHandler = jest.fn()
+    container = render(<Blog blog={blog} updateBlog={updateBlogHandler} />).container
   })
 
   test('title and author are visible', () => {
@@ -42,6 +44,18 @@ describe('render', () => {
       const elem = container.querySelector('[data-test="blog-extra"]')
       expect(elem.textContent).toEqual(blogExtra)
       expect(elem).toBeVisible()
+    })
+  })
+
+  describe('when clicking the like button twice', () => {
+    beforeEach(() => {
+      const button = container.querySelector('[data-test="blog-like-button"]')
+      fireEvent.click(button)
+      fireEvent.click(button)
+    })
+
+    test('calls event handler twice', () => {
+      expect(updateBlogHandler.mock.calls).toHaveLength(2)
     })
   })
 })
