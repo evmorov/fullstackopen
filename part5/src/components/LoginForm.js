@@ -31,7 +31,9 @@ const LoginForm = ({
           />
         </div>
         <br />
-        <button type="submit">Login</button>
+        <button type="submit" data-test="login-button">
+          Login
+        </button>
       </form>
     </div>
   )

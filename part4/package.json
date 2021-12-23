@@ -7,7 +7,8 @@
     "dev": "NODE_ENV=development nodemon index.js",
     "format": "prettier --parser babel --write '**/*.js'",
     "lint": "eslint .",
-    "test": "NODE_ENV=test jest --verbose --runInBand --forceExit"
+    "test": "NODE_ENV=test jest --verbose --runInBand --forceExit",
+    "start:test": "NODE_ENV=test node index.js"
   },
   "license": "MIT",
   "devDependencies": {
