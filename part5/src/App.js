@@ -130,9 +130,11 @@ const App = () => {
           <br />
 
           <h3>List</h3>
-          {sortedBlogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} destroyBlog={destroyBlog} />
-          ))}
+          <div data-test="blog-list">
+            {sortedBlogs.map((blog) => (
+              <Blog key={blog.id} blog={blog} updateBlog={updateBlog} destroyBlog={destroyBlog} />
+            ))}
+          </div>
         </div>
       ) : (
         <LoginForm

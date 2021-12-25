@@ -1,12 +1,11 @@
 describe('Blog app', function () {
   beforeEach(function () {
-    cy.request('POST', 'http://localhost:3003/api/testing/reset')
-    const user = {
+    cy.resetServer()
+    cy.createUser({
       name: 'TestName',
       username: 'TestUsername',
       password: 'TestPassword',
-    }
-    cy.request('POST', 'http://localhost:3001/api/users/', user)
+    })
     cy.visit('http://localhost:3001')
   })
 
@@ -36,6 +35,24 @@ describe('Blog app', function () {
         .should('contain', 'Wrong credentials')
         .and('have.css', 'color', 'rgb(255, 0, 0)')
       expectLoginPage()
+    })
+  })
+
+  describe('When logged in', function () {
+    beforeEach(function () {
+      cy.login({ username: 'TestUsername', password: 'TestPassword' })
+    })
+
+    it('A blog can be created', function () {
+      cy.contains('New blog').click()
+
+      cy.get(dataTest('blog-title-input')).type('TestTitle')
+      cy.get(dataTest('blog-author-input')).type('TestAuthor')
+      cy.get(dataTest('blog-url-input')).type('TestURL')
+      cy.get(dataTest('blog-create-button')).click()
+
+      cy.get(dataTest('notification')).should('contain', 'A new blog TestTitle created')
+      cy.get(dataTest('blog-list')).should('contain', 'TestTitle, TestAuthor')
     })
   })
 })

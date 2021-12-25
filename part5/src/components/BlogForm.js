@@ -66,7 +66,9 @@ const BlogForm = React.forwardRef(({ createBlog }, ref) => {
         </div>
         <br />
         <div>
-          <button type="submit">Create</button>
+          <button type="submit" data-test="blog-create-button">
+            Create
+          </button>
         </div>
       </form>
     </div>
