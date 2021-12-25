@@ -17,6 +17,7 @@ const LoginForm = ({
             value={username}
             name="Username"
             autoComplete="username"
+            data-test="username-input"
             onChange={handleUsernameChange}
           />
         </div>
@@ -27,6 +28,7 @@ const LoginForm = ({
             value={password}
             name="Password"
             autoComplete="current-password"
+            data-test="password-input"
             onChange={handlePasswordChange}
           />
         </div>
