@@ -25,14 +25,14 @@ const Blog = ({ blog: { title, author, url, likes, user }, blog, updateBlog, des
   }
 
   return (
-    <div style={{ marginBottom: 10 }}>
+    <div style={{ marginBottom: 10 }} data-test="blog">
       <span data-test="blog-main">
         {title}, {author}
       </span>{' '}
       <Togglable showLabel="+" hideLabel="-" hidePosition="top" ref={toggleDetailsRef}>
         <div data-test="blog-extra">
           <div>{url}</div>
-          <span>Likes: {likes}</span>
+          <span data-test="blog-likes">Likes: {likes}</span>
           <button style={likeButtonStyle} data-test="blog-like-button" onClick={handleLike}>
             👍
           </button>
