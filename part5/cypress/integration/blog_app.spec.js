@@ -1,12 +1,12 @@
 describe('Blog app', function () {
   beforeEach(function () {
-    cy.resetServer()
+    cy.resetServerData()
     cy.createUser({
       name: 'TestName',
       username: 'TestUsername',
       password: 'TestPassword',
     })
-    cy.visit('http://localhost:3001')
+    cy.visitSite()
   })
 
   it('Login form is shown', function () {
@@ -64,7 +64,7 @@ describe('Blog app', function () {
         })
       })
 
-      it('it can be liked', function () {
+      it('can be liked', function () {
         const blog = getBlogWithTitle('TestTitle')
         blog.find(dataTest('toggle-button')).click()
 
@@ -73,6 +73,43 @@ describe('Blog app', function () {
         blog.get(dataTest('blog-likes')).should('have.text', 'Likes: 1')
         blog.get(dataTest('blog-like-button')).click()
         blog.get(dataTest('blog-likes')).should('have.text', 'Likes: 2')
+      })
+
+      it('can be removed', function () {
+        getBlogWithTitle('TestTitle').find(dataTest('toggle-button')).click()
+        getBlogWithTitle('TestTitle')
+          .find(dataTest('blog-remove-button'))
+          .click()
+          .should('not.exist')
+        cy.get(dataTest('blog-list')).contains('TestTitle').should('not.exist')
+        cy.get(dataTest('notification')).should('contain', 'Blog TestTitle has been removed')
+      })
+    })
+
+    describe('when a blog of another user exists', function () {
+      beforeEach(function () {
+        cy.createUser({
+          name: 'AnotherName',
+          username: 'AnotherUsername',
+          password: 'AnotherPassword',
+        })
+        cy.createBlogForUser({
+          username: 'AnotherUsername',
+          password: 'AnotherPassword',
+          title: 'AnotherTitle',
+          author: 'AnotherAuthor',
+          url: 'AnotherUrl',
+        })
+      })
+
+      it("can't be removed", function () {
+        getBlogWithTitle('AnotherTitle').find(dataTest('toggle-button')).click()
+        getBlogWithTitle('AnotherTitle')
+          .find(dataTest('blog-remove-button'))
+          .click()
+          .should('exist')
+        cy.get(dataTest('blog-list')).contains('AnotherTitle').should('exist')
+        cy.get(dataTest('notification')).should('contain', 'Forbidden')
       })
     })
   })
