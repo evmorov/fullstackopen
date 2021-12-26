@@ -39,7 +39,9 @@ const Blog = ({ blog: { title, author, url, likes, user }, blog, updateBlog, des
           <div>Owner: {user.name}</div>
         </div>
         <div>
-          <button onClick={handleRemove} data-test="blog-remove-button">Remove</button>
+          <button onClick={handleRemove} data-test="blog-remove-button">
+            Remove
+          </button>
         </div>
       </Togglable>
     </div>

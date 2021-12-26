@@ -112,6 +112,21 @@ describe('Blog app', function () {
         cy.get(dataTest('notification')).should('contain', 'Forbidden')
       })
     })
+
+    describe('there are many blogs', function () {
+      beforeEach(function () {
+        cy.createBlog({ title: 'TestTitle2', author: 'TestAuthor2', likes: 2 })
+        cy.createBlog({ title: 'TestTitle1', author: 'TestAuthor1', likes: 1 })
+        cy.createBlog({ title: 'TestTitle3', author: 'TestAuthor3', likes: 3 })
+      })
+
+      it.only('blogs are ordered by likes', function () {
+        cy.get(dataTest('blog')).then((blogs) => {
+          const titles = blogs.map((_, blog) => blog.innerText.split(',')[0]).toArray()
+          expect(titles).to.deep.eq(['TestTitle3', 'TestTitle2', 'TestTitle1'])
+        })
+      })
+    })
   })
 })
 
