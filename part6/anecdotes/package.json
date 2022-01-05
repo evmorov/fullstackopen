@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "deep-freeze": "^0.0.1",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "redux-devtools-extension": "^2.13.9"
   }
 }
