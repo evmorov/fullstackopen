@@ -10,7 +10,7 @@ const Notification = () => {
     borderWidth: 1,
   }
 
-  if (Object.keys(notification).length === 0) return null
+  if (notification === '') return null
 
   return <div style={style}>{notification}</div>
 }
