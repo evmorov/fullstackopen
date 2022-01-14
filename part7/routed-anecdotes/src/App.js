@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Switch, Route, Link } from 'react-router-dom'
+import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
 
 const Menu = () => {
   const padding = { paddingRight: 5 }
@@ -24,9 +24,23 @@ const AnecdoteList = ({ anecdotes }) => (
     <h2>Anecdotes</h2>
     <ul>
       {anecdotes.map((anecdote) => (
-        <li key={anecdote.id}>{anecdote.content}</li>
+        <li key={anecdote.id}>
+          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+        </li>
       ))}
     </ul>
+  </div>
+)
+
+const Anecdote = ({ anecdote: { content, author, info, votes } }) => (
+  <div>
+    <h2>
+      {content} by {author}
+    </h2>
+    <p>Has {votes} votes</p>
+    <p>
+      For more info see <a href={info}>{info}</a>
+    </p>
   </div>
 )
 
@@ -79,21 +93,21 @@ const New = (props) => {
 
   return (
     <div>
-      <h2>create a new anecdote</h2>
+      <h2>New anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          content
+          Content
           <input name="content" value={content} onChange={(e) => setContent(e.target.value)} />
         </div>
         <div>
-          author
+          Author
           <input name="author" value={author} onChange={(e) => setAuthor(e.target.value)} />
         </div>
         <div>
-          url for more info
+          Url for more info
           <input name="info" value={info} onChange={(e) => setInfo(e.target.value)} />
         </div>
-        <button>create</button>
+        <button>Create</button>
       </form>
     </div>
   )
@@ -137,11 +151,19 @@ const App = () => {
   //   setAnecdotes(anecdotes.map((a) => (a.id === id ? voted : a)))
   // }
 
+  const match = useRouteMatch('/anecdotes/:id')
+  const anecdote = match
+    ? anecdotes.find((anecdote) => Number(anecdote.id) === Number(match.params.id))
+    : null
+
   return (
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
       <Switch>
+        <Route path="/anecdotes/:id">
+          <Anecdote anecdote={anecdote} />
+        </Route>
         <Route path="/new">
           <New create={create} />
         </Route>
