@@ -1,20 +1,20 @@
 import React, { useState } from 'react'
+import { Switch, Route, Link } from 'react-router-dom'
 
 const Menu = () => {
-  const padding = {
-    paddingRight: 5,
-  }
+  const padding = { paddingRight: 5 }
+
   return (
     <div>
-      <a href="#" style={padding}>
-        anecdotes
-      </a>
-      <a href="#" style={padding}>
-        create new
-      </a>
-      <a href="#" style={padding}>
-        about
-      </a>
+      <Link style={padding} to="/">
+        Anecdotes
+      </Link>
+      <Link style={padding} to="/new">
+        New
+      </Link>
+      <Link style={padding} to="/about">
+        About
+      </Link>
     </div>
   )
 }
@@ -41,7 +41,7 @@ const About = () => (
       laughter but to reveal a truth more general than the brief tale itself, such as to
       characterize a person by delineating a specific quirk or trait, to communicate an abstract
       idea about a person, place, or thing through the concrete details of a short narrative. An
-      anecdote is "a story with a point."
+      anecdote is &ldquo;a story with a point.&ldquo;
     </em>
 
     <p>
@@ -62,14 +62,14 @@ const Footer = () => (
   </div>
 )
 
-const CreateNew = (props) => {
+const New = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    props.addNew({
+    props.create({
       content,
       author,
       info,
@@ -117,33 +117,41 @@ const App = () => {
     },
   ])
 
-  const [notification, setNotification] = useState('')
-
-  const addNew = (anecdote) => {
+  const create = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
   }
 
-  const anecdoteById = (id) => anecdotes.find((a) => a.id === id)
+  // const [notification, setNotification] = useState('')
 
-  const vote = (id) => {
-    const anecdote = anecdoteById(id)
+  // const anecdoteById = (id) => anecdotes.find((a) => a.id === id)
 
-    const voted = {
-      ...anecdote,
-      votes: anecdote.votes + 1,
-    }
+  // const vote = (id) => {
+  //   const anecdote = anecdoteById(id)
 
-    setAnecdotes(anecdotes.map((a) => (a.id === id ? voted : a)))
-  }
+  //   const voted = {
+  //     ...anecdote,
+  //     votes: anecdote.votes + 1,
+  //   }
+
+  //   setAnecdotes(anecdotes.map((a) => (a.id === id ? voted : a)))
+  // }
 
   return (
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
-      <AnecdoteList anecdotes={anecdotes} />
-      <About />
-      <CreateNew addNew={addNew} />
+      <Switch>
+        <Route path="/new">
+          <New create={create} />
+        </Route>
+        <Route path="/about">
+          <About />
+        </Route>
+        <Route path="/">
+          <AnecdoteList anecdotes={anecdotes} />
+        </Route>
+      </Switch>
       <Footer />
     </div>
   )
