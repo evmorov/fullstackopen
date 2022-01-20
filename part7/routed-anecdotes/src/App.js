@@ -93,6 +93,12 @@ const New = ({ create }) => {
     })
   }
 
+  const handleReset = () => {
+    content.reset()
+    author.reset()
+    info.reset()
+  }
+
   return (
     <div>
       <h2>New anecdote</h2>
@@ -109,7 +115,11 @@ const New = ({ create }) => {
           Url for more info
           <input {...info} />
         </div>
-        <button>Create</button>
+        <input type="submit" value="Create" />
+        &nbsp;
+        <button type="button" onClick={handleReset}>
+          Reset
+        </button>
       </form>
     </div>
   )
