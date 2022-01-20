@@ -105,15 +105,15 @@ const New = ({ create }) => {
       <form onSubmit={handleSubmit}>
         <div>
           Content
-          <input {...content} />
+          <input {...content.attrs} />
         </div>
         <div>
           Author
-          <input {...author} />
+          <input {...author.attrs} />
         </div>
         <div>
           Url for more info
-          <input {...info} />
+          <input {...info.attrs} />
         </div>
         <input type="submit" value="Create" />
         &nbsp;
