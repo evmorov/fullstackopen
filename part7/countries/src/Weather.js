@@ -1,30 +1,20 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import React from 'react'
+import { useCountry } from './hooks/index.js'
 
 const Weather = ({ place }) => {
-  const [weather, setWeather] = useState({})
+  const country = useCountry(place)
 
-  useEffect(() => {
-    axios
-      .get(
-        `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_WEATHER_KEY}&query=${place}`,
-      )
-      .then((response) => {
-        setWeather(response.data)
-      })
-  }, [place])
-
-  if (!weather.current) return null
+  if (!country.current) return null
 
   return (
     <>
       <h2>Weather in {place}</h2>
       <div>
-        <strong>temperature:</strong> {weather.current.temperature} Celsius
+        <strong>temperature:</strong> {country.current.temperature} Celsius
       </div>
-      <img src={weather.current.weather_icons[0]} alt="Weather" width="100" />
+      <img src={country.current.weather_icons[0]} alt="Weather" width="100" />
       <div>
-        <strong>wind:</strong> {weather.current.wind_speed} mph direction {weather.current.wind_dir}
+        <strong>wind:</strong> {country.current.wind_speed} mph direction {country.current.wind_dir}
       </div>
     </>
   )
