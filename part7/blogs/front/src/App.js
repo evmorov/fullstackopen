@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -8,22 +8,19 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { showNotification } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const blogFormRef = useRef()
   const toggleBlogFormRef = useRef()
   const dispatch = useDispatch()
+  const blogs = useSelector((state) => state.blogs.entries)
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      const blogs = await blogService.getAll()
-      setBlogs(blogs)
-    }
-    fetchBlogs()
+    dispatch(initializeBlogs())
   }, [])
 
   useEffect(() => {
@@ -69,33 +66,22 @@ const App = () => {
     showInfo('Successfully logged out')
   }
 
-  const createBlog = async (blog) => {
-    try {
-      const returnedBlog = await blogService.create(blog)
-      setBlogs(blogs.concat(returnedBlog))
-      showInfo(`A new blog ${returnedBlog.title} created`)
-      blogFormRef.current.clearForm()
-      toggleBlogFormRef.current.toggleVisibility()
-    } catch (exception) {
-      exception.response ? showError(exception.response.data.error) : console.error(exception)
-    }
-  }
-
-  const updateBlog = async (blog) => {
-    const id = blog.id
-    try {
-      const returnedBlog = await blogService.update(id, blog)
-      setBlogs(blogs.map((b) => (b.id === id ? returnedBlog : b)))
-    } catch (exception) {
-      exception.response ? showError(exception.response.data.error) : console.error(exception)
-    }
-  }
+  const updateBlog = async () => {}
+  // const updateBlog = async (blog) => {
+  //   const id = blog.id
+  //   try {
+  //     const returnedBlog = await blogService.update(id, blog)
+  //     setBlogs(blogs.map((b) => (b.id === id ? returnedBlog : b)))
+  //   } catch (exception) {
+  //     exception.response ? showError(exception.response.data.error) : console.error(exception)
+  //   }
+  // }
 
   const destroyBlog = async (blog) => {
     const id = blog.id
     try {
       await blogService.destroy(id)
-      setBlogs(blogs.filter((blog) => blog.id !== id))
+      // setBlogs(blogs.filter((blog) => blog.id !== id))
       showInfo(`Blog ${blog.title} has been removed`)
     } catch (exception) {
       exception.response ? showError(exception.response.data.error) : console.error(exception)
@@ -124,7 +110,7 @@ const App = () => {
             hidePosition="bottom"
             ref={toggleBlogFormRef}
           >
-            <BlogForm createBlog={createBlog} ref={blogFormRef} />
+            <BlogForm ref={blogFormRef} toggleBlogFormRef={toggleBlogFormRef} />
           </Togglable>
 
           <br />

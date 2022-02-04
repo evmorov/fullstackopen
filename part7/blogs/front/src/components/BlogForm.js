@@ -1,18 +1,29 @@
-import React, { useState, useImperativeHandle } from 'react'
+import React, { useState, useImperativeHandle, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { createBlog } from './../reducers/blogReducer'
 
-const BlogForm = React.forwardRef(({ createBlog }, ref) => {
+const BlogForm = React.forwardRef(({ toggleBlogFormRef }, ref) => {
   const [blogTitle, setBlogTitle] = useState('')
   const [blogAuthor, setBlogAuthor] = useState('')
   const [blogUrl, setBlogUrl] = useState('')
+  const dispatch = useDispatch()
+  const blogRespond = useSelector((state) => state.blogs.entryRespond)
 
-  const addBlog = (event) => {
+  useEffect(() => {
+    if (!blogRespond) return
+    clearForm()
+    toggleBlogFormRef.current.toggleVisibility()
+  }, [blogRespond])
+
+  const addBlog = async (event) => {
     event.preventDefault()
-
-    createBlog({
-      title: blogTitle,
-      author: blogAuthor,
-      url: blogUrl,
-    })
+    await dispatch(
+      createBlog({
+        title: blogTitle,
+        author: blogAuthor,
+        url: blogUrl,
+      }),
+    )
   }
 
   const clearForm = () => {
