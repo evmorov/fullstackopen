@@ -66,28 +66,6 @@ const App = () => {
     showInfo('Successfully logged out')
   }
 
-  const updateBlog = async () => {}
-  // const updateBlog = async (blog) => {
-  //   const id = blog.id
-  //   try {
-  //     const returnedBlog = await blogService.update(id, blog)
-  //     setBlogs(blogs.map((b) => (b.id === id ? returnedBlog : b)))
-  //   } catch (exception) {
-  //     exception.response ? showError(exception.response.data.error) : console.error(exception)
-  //   }
-  // }
-
-  const destroyBlog = async (blog) => {
-    const id = blog.id
-    try {
-      await blogService.destroy(id)
-      // setBlogs(blogs.filter((blog) => blog.id !== id))
-      showInfo(`Blog ${blog.title} has been removed`)
-    } catch (exception) {
-      exception.response ? showError(exception.response.data.error) : console.error(exception)
-    }
-  }
-
   const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
 
   return (
@@ -118,7 +96,7 @@ const App = () => {
           <h3>List</h3>
           <div data-test="blog-list">
             {sortedBlogs.map((blog) => (
-              <Blog key={blog.id} blog={blog} updateBlog={updateBlog} destroyBlog={destroyBlog} />
+              <Blog key={blog.id} blog={blog} />
             ))}
           </div>
         </div>

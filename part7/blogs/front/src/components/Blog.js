@@ -1,8 +1,11 @@
 import React, { useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import Togglable from './Togglable'
+import { updateBlog, destroyBlog } from './../reducers/blogReducer'
 
-const Blog = ({ blog: { title, author, url, likes, user }, blog, updateBlog, destroyBlog }) => {
+const Blog = ({ blog: { title, author, url, likes, user }, blog }) => {
   const toggleDetailsRef = useRef()
+  const dispatch = useDispatch()
 
   const likeButtonStyle = {
     border: 'none',
@@ -14,14 +17,14 @@ const Blog = ({ blog: { title, author, url, likes, user }, blog, updateBlog, des
     event.preventDefault()
     const editedBlog = { ...blog, likes: likes + 1 }
 
-    updateBlog(editedBlog)
+    dispatch(updateBlog(editedBlog))
   }
 
   const handleRemove = (event) => {
     event.preventDefault()
     window.confirm(`Remove blog ${title} by ${author}`)
 
-    destroyBlog(blog)
+    dispatch(destroyBlog(blog))
   }
 
   return (

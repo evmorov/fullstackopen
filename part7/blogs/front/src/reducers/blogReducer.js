@@ -8,7 +8,11 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'NEW_BLOG': {
+    case 'INIT_BLOGS': {
+      const entries = action.data
+      return { ...initialState, entries }
+    }
+    case 'CREATE_BLOG': {
       const newBlog = action.data
       return {
         ...initialState,
@@ -16,9 +20,19 @@ const reducer = (state = initialState, action) => {
         entryRespond: newBlog,
       }
     }
-    case 'INIT_BLOGS': {
-      const entries = action.data
-      return { ...initialState, entries }
+    case 'UPDATE_BLOG': {
+      const updatedBlog = action.data
+      return {
+        ...initialState,
+        entries: state.entries.map((b) => (b.id === updatedBlog.id ? updatedBlog : b)),
+      }
+    }
+    case 'DESTROY_BLOG': {
+      const destroyedBlog = action.data
+      return {
+        ...initialState,
+        entries: state.entries.filter((blog) => blog.id !== destroyedBlog.id),
+      }
     }
     default:
       return state
@@ -39,18 +53,47 @@ export const createBlog = (blog) => {
   return async (dispatch, getState) => {
     try {
       const newBlog = await blogService.create(blog)
-      dispatch({ type: 'NEW_BLOG', data: newBlog })
+      dispatch({ type: 'CREATE_BLOG', data: newBlog })
 
       const message = `A new blog ${getState().blogs.entryRespond.title} created`
       dispatch(showNotification({ message: message, kind: 'info', seconds: 3 }))
     } catch (exception) {
-      if (exception.response) {
-        const message = exception.response.data.error
-        dispatch(showNotification({ message: message, kind: 'error', seconds: 4 }))
-      } else {
-        console.error(exception)
-      }
+      handleException(exception, dispatch)
     }
+  }
+}
+
+export const updateBlog = (blog) => {
+  return async (dispatch) => {
+    try {
+      const updatedBlog = await blogService.update(blog.id, blog)
+      dispatch({ type: 'UPDATE_BLOG', data: updatedBlog })
+    } catch (exception) {
+      handleException(exception, dispatch)
+    }
+  }
+}
+
+export const destroyBlog = (blog) => {
+  return async (dispatch) => {
+    try {
+      await blogService.destroy(blog.id)
+      dispatch({ type: 'DESTROY_BLOG', data: blog })
+
+      const message = `Blog ${blog.title} has been removed`
+      dispatch(showNotification({ message: message, kind: 'info', seconds: 3 }))
+    } catch (exception) {
+      handleException(exception, dispatch)
+    }
+  }
+}
+
+const handleException = (exception, dispatch) => {
+  if (exception.response) {
+    const message = exception.response.data.error
+    dispatch(showNotification({ message: message, kind: 'error', seconds: 4 }))
+  } else {
+    console.error(exception)
   }
 }
 
