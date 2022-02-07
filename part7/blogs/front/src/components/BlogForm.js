@@ -15,9 +15,9 @@ const BlogForm = React.forwardRef(({ toggleBlogFormRef }, ref) => {
     toggleBlogFormRef.current.toggleVisibility()
   }, [blogRespond])
 
-  const addBlog = async (event) => {
+  const addBlog = (event) => {
     event.preventDefault()
-    await dispatch(
+    dispatch(
       createBlog({
         title: blogTitle,
         author: blogAuthor,
