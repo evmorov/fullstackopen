@@ -5,7 +5,7 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import { loginFromStorage, logout } from './reducers/loginReducer'
+import { loginFromStorage, logout } from './reducers/userReducer'
 
 const App = () => {
   const toggleBlogFormRef = useRef()
