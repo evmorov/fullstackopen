@@ -6,6 +6,8 @@ const reducer = (state = initialState, action) => {
       return action.data
     case 'HIDE_NOTIFICATION':
       return initialState
+    case 'LOGOUT':
+      return initialState
     default:
       return state
   }

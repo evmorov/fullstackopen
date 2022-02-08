@@ -1,8 +1,8 @@
-import React, { useState, useImperativeHandle, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { createBlog } from './../reducers/blogReducer'
 
-const BlogForm = React.forwardRef(({ toggleBlogFormRef }, ref) => {
+const BlogForm = ({ toggleBlogFormRef }) => {
   const [blogTitle, setBlogTitle] = useState('')
   const [blogAuthor, setBlogAuthor] = useState('')
   const [blogUrl, setBlogUrl] = useState('')
@@ -31,12 +31,6 @@ const BlogForm = React.forwardRef(({ toggleBlogFormRef }, ref) => {
     setBlogAuthor('')
     setBlogUrl('')
   }
-
-  useImperativeHandle(ref, () => {
-    return {
-      clearForm,
-    }
-  })
 
   return (
     <div>
@@ -84,7 +78,7 @@ const BlogForm = React.forwardRef(({ toggleBlogFormRef }, ref) => {
       </form>
     </div>
   )
-})
+}
 
 BlogForm.displayName = 'BlogForm'
 

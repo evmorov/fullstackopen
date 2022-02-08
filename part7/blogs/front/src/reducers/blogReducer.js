@@ -34,6 +34,8 @@ const reducer = (state = initialState, action) => {
         entries: state.entries.filter((blog) => blog.id !== destroyedBlog.id),
       }
     }
+    case 'LOGOUT':
+      return initialState
     default:
       return state
   }

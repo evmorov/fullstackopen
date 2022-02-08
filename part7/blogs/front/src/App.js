@@ -1,69 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import blogService from './services/blogs'
-import loginService from './services/login'
-import { showNotification } from './reducers/notificationReducer'
-import { initializeBlogs } from './reducers/blogReducer'
+import { loginFromStorage, logout } from './reducers/loginReducer'
 
 const App = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-  const blogFormRef = useRef()
   const toggleBlogFormRef = useRef()
   const dispatch = useDispatch()
   const blogs = useSelector((state) => state.blogs.entries)
+  const user = useSelector((state) => state.user)
 
   useEffect(() => {
-    dispatch(initializeBlogs())
+    dispatch(loginFromStorage())
   }, [])
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
-
-  const showInfo = (message) => {
-    dispatch(showNotification({ message: message, kind: 'info', seconds: 3 }))
-  }
-
-  const showError = (message) => {
-    dispatch(showNotification({ message: message, kind: 'error', seconds: 4 }))
-  }
-
-  const handleLogin = async (event) => {
-    event.preventDefault()
-
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      })
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-      setUser(user)
-      blogService.setToken(user.token)
-      setUsername('')
-      setPassword('')
-      showInfo('Successfully logged in')
-    } catch (exception) {
-      showError('Wrong credentials')
-    }
-  }
 
   const handleLogout = () => {
-    window.localStorage.clear()
-    setUser(null)
-    blogFormRef.current && blogFormRef.current.clearForm()
-    showInfo('Successfully logged out')
+    dispatch(logout())
   }
 
   const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
@@ -88,7 +43,7 @@ const App = () => {
             hidePosition="bottom"
             ref={toggleBlogFormRef}
           >
-            <BlogForm ref={blogFormRef} toggleBlogFormRef={toggleBlogFormRef} />
+            <BlogForm toggleBlogFormRef={toggleBlogFormRef} />
           </Togglable>
 
           <br />
@@ -101,13 +56,7 @@ const App = () => {
           </div>
         </div>
       ) : (
-        <LoginForm
-          handleSubmit={handleLogin}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePasswordChange={({ target }) => setPassword(target.value)}
-          username={username}
-          password={password}
-        />
+        <LoginForm />
       )}
     </div>
   )
