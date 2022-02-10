@@ -1,4 +1,4 @@
-import blogService from './../services/blogs'
+import BlogService from './../services/BlogService'
 import { showNotification } from './notificationReducer'
 
 const initialState = {
@@ -43,7 +43,7 @@ const reducer = (state = initialState, action) => {
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
-    const blogs = await blogService.getAll()
+    const blogs = await new BlogService().getAll()
     dispatch({
       type: 'INIT_BLOGS',
       data: blogs,
@@ -53,8 +53,9 @@ export const initializeBlogs = () => {
 
 export const createBlog = (blog) => {
   return async (dispatch, getState) => {
+    const { token } = getState().user
     try {
-      const newBlog = await blogService.create(blog)
+      const newBlog = await new BlogService(token).create(blog)
       dispatch({ type: 'CREATE_BLOG', data: newBlog })
 
       const message = `A new blog ${getState().blogs.entryRespond.title} created`
@@ -66,9 +67,10 @@ export const createBlog = (blog) => {
 }
 
 export const updateBlog = (blog) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const { token } = getState().user
     try {
-      const updatedBlog = await blogService.update(blog.id, blog)
+      const updatedBlog = await new BlogService(token).update(blog.id, blog)
       dispatch({ type: 'UPDATE_BLOG', data: updatedBlog })
     } catch (exception) {
       handleException(exception, dispatch)
@@ -77,9 +79,10 @@ export const updateBlog = (blog) => {
 }
 
 export const destroyBlog = (blog) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const { token } = getState().user
     try {
-      await blogService.destroy(blog.id)
+      await new BlogService(token).destroy(blog.id)
       dispatch({ type: 'DESTROY_BLOG', data: blog })
 
       const message = `Blog ${blog.title} has been removed`

@@ -1,5 +1,4 @@
 import loginService from './../services/login'
-import blogService from './../services/blogs'
 import { showNotification } from './notificationReducer'
 import { initializeBlogs } from './blogReducer'
 
@@ -25,7 +24,6 @@ export const login = (username, password) => {
       })
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       dispatch({ type: 'LOGIN', data: user })
-      blogService.setToken(user.token)
       dispatch(initializeBlogs())
       dispatch(showNotification({ message: 'Successfully logged in', kind: 'info', seconds: 3 }))
     } catch (exception) {
@@ -40,7 +38,6 @@ export const loginFromStorage = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       dispatch({ type: 'LOGIN', data: user })
-      blogService.setToken(user.token)
       dispatch(initializeBlogs())
     }
   }
