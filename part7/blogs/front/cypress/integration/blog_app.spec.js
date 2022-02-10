@@ -32,7 +32,7 @@ describe('Blog app', function () {
       cy.get(dataTest('login-button')).click()
 
       cy.get(dataTest('notification'))
-        .should('contain', 'Wrong credentials')
+        .should('contain', 'invalid username or password')
         .and('have.css', 'color', 'rgb(255, 0, 0)')
       expectLoginPage()
     })
