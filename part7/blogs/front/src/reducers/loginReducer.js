@@ -1,6 +1,6 @@
 import loginService from './../services/login'
 import { showNotification } from './notificationReducer'
-import { initializeBlogs } from './blogReducer'
+import { getBlogs } from './blogsReducer'
 
 const initialState = null
 
@@ -18,13 +18,13 @@ const reducer = (state = initialState, action) => {
 export const login = (username, password) => {
   return async (dispatch) => {
     try {
-      const user = await loginService.login({
+      const currentUser = await loginService.login({
         username,
         password,
       })
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-      dispatch({ type: 'LOGIN', data: user })
-      dispatch(initializeBlogs())
+      window.localStorage.setItem('currentUser', JSON.stringify(currentUser))
+      dispatch({ type: 'LOGIN', data: currentUser })
+      dispatch(getBlogs())
       dispatch(showNotification({ message: 'Successfully logged in', kind: 'info', seconds: 3 }))
     } catch (exception) {
       handleException(exception, dispatch)
@@ -34,11 +34,11 @@ export const login = (username, password) => {
 
 export const loginFromStorage = () => {
   return async (dispatch) => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      dispatch({ type: 'LOGIN', data: user })
-      dispatch(initializeBlogs())
+    const currentUserJSON = window.localStorage.getItem('currentUser')
+    if (currentUserJSON) {
+      const currentUser = JSON.parse(currentUserJSON)
+      dispatch({ type: 'LOGIN', data: currentUser })
+      dispatch(getBlogs())
     }
   }
 }

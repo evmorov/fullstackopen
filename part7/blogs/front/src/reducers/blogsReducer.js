@@ -41,7 +41,7 @@ const reducer = (state = initialState, action) => {
   }
 }
 
-export const initializeBlogs = () => {
+export const getBlogs = () => {
   return async (dispatch) => {
     const blogs = await new BlogService().getAll()
     dispatch({
@@ -53,7 +53,7 @@ export const initializeBlogs = () => {
 
 export const createBlog = (blog) => {
   return async (dispatch, getState) => {
-    const { token } = getState().user
+    const { token } = getState().currentUser
     try {
       const newBlog = await new BlogService(token).create(blog)
       dispatch({ type: 'CREATE_BLOG', data: newBlog })
@@ -68,7 +68,7 @@ export const createBlog = (blog) => {
 
 export const updateBlog = (blog) => {
   return async (dispatch, getState) => {
-    const { token } = getState().user
+    const { token } = getState().currentUser
     try {
       const updatedBlog = await new BlogService(token).update(blog.id, blog)
       dispatch({ type: 'UPDATE_BLOG', data: updatedBlog })
@@ -80,7 +80,7 @@ export const updateBlog = (blog) => {
 
 export const destroyBlog = (blog) => {
   return async (dispatch, getState) => {
-    const { token } = getState().user
+    const { token } = getState().currentUser
     try {
       await new BlogService(token).destroy(blog.id)
       dispatch({ type: 'DESTROY_BLOG', data: blog })

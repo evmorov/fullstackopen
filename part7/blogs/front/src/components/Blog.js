@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import Togglable from './Togglable'
-import { updateBlog, destroyBlog } from './../reducers/blogReducer'
+import { updateBlog, destroyBlog } from './../reducers/blogsReducer'
 
 const Blog = ({ blog: { title, author, url, likes, user }, blog }) => {
   const toggleDetailsRef = useRef()
