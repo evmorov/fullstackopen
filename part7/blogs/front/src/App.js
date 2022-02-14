@@ -8,7 +8,7 @@ import Blogs from './components/Blogs'
 import Blog from './components/Blog'
 import Users from './components/Users'
 import User from './components/User'
-import { loginFromStorage, logout } from './reducers/loginReducer'
+import { loginFromStorage } from './reducers/loginReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -18,20 +18,12 @@ const App = () => {
     dispatch(loginFromStorage())
   }, [])
 
-  const handleLogout = () => {
-    dispatch(logout())
-  }
-
   return (
     <>
       {currentUser ? (
         <>
           <Menu />
           <h1>Blogs</h1>
-          <div style={{ paddingBottom: 10 }}>
-            <span>{currentUser.name} logged-in </span>
-            <button onClick={handleLogout}>Logout</button>
-          </div>
           <Notification />
 
           <Switch>
