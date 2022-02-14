@@ -1,11 +1,19 @@
-import React, { useRef } from 'react'
-import { useDispatch } from 'react-redux'
-import Togglable from './Togglable'
+import React from 'react'
+import { useRouteMatch, useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateBlog, destroyBlog } from './../reducers/blogsReducer'
 
-const Blog = ({ blog: { title, author, url, likes, user }, blog }) => {
-  const toggleDetailsRef = useRef()
+const Blog = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
+  const blogs = useSelector((state) => state.blogs.entries)
+
+  const match = useRouteMatch('/blogs/:id')
+  const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
+
+  if (!blog) return null
+
+  const { title, author, url, likes, user } = blog
 
   const likeButtonStyle = {
     border: 'none',
@@ -22,31 +30,35 @@ const Blog = ({ blog: { title, author, url, likes, user }, blog }) => {
 
   const handleRemove = (event) => {
     event.preventDefault()
-    window.confirm(`Remove blog ${title} by ${author}`)
-
-    dispatch(destroyBlog(blog))
+    if (window.confirm(`Remove blog ${title} by ${author}`)) {
+      history.push('/')
+      dispatch(destroyBlog(blog))
+    }
   }
 
   return (
-    <div style={{ marginBottom: 10 }} data-test="blog">
-      <span data-test="blog-main">
+    <div>
+      <h2>
         {title}, {author}
-      </span>{' '}
-      <Togglable showLabel="+" hideLabel="-" hidePosition="top" ref={toggleDetailsRef}>
-        <div data-test="blog-extra">
-          <div>{url}</div>
-          <span data-test="blog-likes">Likes: {likes}</span>
-          <button style={likeButtonStyle} data-test="blog-like-button" onClick={handleLike}>
-            👍
-          </button>
-          <div>Owner: {user.name}</div>
-        </div>
+      </h2>
+
+      <div>
         <div>
-          <button onClick={handleRemove} data-test="blog-remove-button">
-            Remove
-          </button>
+          <a rel="noopener noreferrer" href={url} target="_blank">
+            {url}
+          </a>
         </div>
-      </Togglable>
+        <span data-test="blog-likes">Likes: {likes}</span>
+        <button style={likeButtonStyle} data-test="blog-like-button" onClick={handleLike}>
+          👍
+        </button>
+        <div>Owner: {user.name}</div>
+      </div>
+      <div>
+        <button onClick={handleRemove} data-test="blog-remove-button">
+          Remove
+        </button>
+      </div>
     </div>
   )
 }

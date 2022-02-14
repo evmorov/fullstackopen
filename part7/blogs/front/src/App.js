@@ -5,6 +5,7 @@ import Menu from './components/Menu'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Blogs from './components/Blogs'
+import Blog from './components/Blog'
 import Users from './components/Users'
 import User from './components/User'
 import { loginFromStorage, logout } from './reducers/loginReducer'
@@ -39,6 +40,9 @@ const App = () => {
             </Route>
             <Route path="/users">
               <Users />
+            </Route>
+            <Route path="/Blogs/:id">
+              <Blog />
             </Route>
             <Route path="/">
               <Blogs />
