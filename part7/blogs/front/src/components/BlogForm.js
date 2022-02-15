@@ -10,9 +10,8 @@ const BlogForm = ({ toggleBlogFormRef }) => {
   const blogRespond = useSelector((state) => state.blogs.entryRespond)
 
   useEffect(() => {
-    if (!blogRespond) return
     clearForm()
-    toggleBlogFormRef.current.toggleVisibility()
+    toggleBlogFormRef.current.hide()
   }, [blogRespond])
 
   const addBlog = (event) => {
