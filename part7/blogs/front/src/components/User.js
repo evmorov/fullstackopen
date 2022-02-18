@@ -3,7 +3,7 @@ import { useRouteMatch } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { getUsers } from './../reducers/usersReducer'
 
-const Users = () => {
+const User = () => {
   const dispatch = useDispatch()
   const users = useSelector((state) => state.users)
 
@@ -29,4 +29,4 @@ const Users = () => {
   )
 }
 
-export default Users
+export default User
