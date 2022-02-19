@@ -13,7 +13,7 @@ const Blog = () => {
 
   if (!blog) return null
 
-  const { title, author, url, likes, user } = blog
+  const { title, author, url, likes, user, comments } = blog
 
   const likeButtonStyle = {
     border: 'none',
@@ -52,13 +52,21 @@ const Blog = () => {
         <button style={likeButtonStyle} data-test="blog-like-button" onClick={handleLike}>
           👍
         </button>
-        <div>Owner: {user.name}</div>
+        <div>Added by {user.name}</div>
       </div>
       <div>
         <button onClick={handleRemove} data-test="blog-remove-button">
           Remove
         </button>
       </div>
+
+      <h3>Comments</h3>
+
+      <ul>
+        {comments.map((comment) => (
+          <li key={comment.id}>{comment.text}</li>
+        ))}
+      </ul>
     </div>
   )
 }
