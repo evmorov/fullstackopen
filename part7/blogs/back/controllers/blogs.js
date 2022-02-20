@@ -45,7 +45,9 @@ blogsRouter.put('/:id', requireCurrentUser, async (request, response, next) => {
       params.id,
       { likes: body.likes },
       { new: true, runValidators: true },
-    ).populate('user', { username: 1, name: 1 })
+    )
+      .populate('user', { username: 1, name: 1 })
+      .populate('comments', { text: 1 })
     response.json(updatedBlog).end()
   } catch (exception) {
     next(exception)

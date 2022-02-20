@@ -2,6 +2,7 @@ import React from 'react'
 import { useRouteMatch, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateBlog, destroyBlog } from './../reducers/blogsReducer'
+import Comments from './Comments'
 
 const Blog = () => {
   const dispatch = useDispatch()
@@ -60,13 +61,7 @@ const Blog = () => {
         </button>
       </div>
 
-      <h3>Comments</h3>
-
-      <ul>
-        {comments.map((comment) => (
-          <li key={comment.id}>{comment.text}</li>
-        ))}
-      </ul>
+      <Comments comments={comments} />
     </div>
   )
 }
