@@ -33,7 +33,7 @@ const App = () => {
             <Route path="/users">
               <Users />
             </Route>
-            <Route path="/Blogs/:id">
+            <Route path="/blogs/:id">
               <Blog />
             </Route>
             <Route path="/">

@@ -12,8 +12,9 @@ const reducer = (state = initialState, action) => {
 }
 
 export const getUsers = () => {
-  return async (dispatch) => {
-    const users = await new UserService().getAll()
+  return async (dispatch, getState) => {
+    const { token } = getState().currentUser
+    const users = await new UserService(token).getAll()
     dispatch({
       type: 'INIT_USERS',
       data: users,

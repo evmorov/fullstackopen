@@ -1,8 +1,9 @@
 const commentsRouter = require('express').Router({ mergeParams: true })
 const Comment = require('../models/comment')
 const Blog = require('../models/blog')
+const requireCurrentUser = require('./../utils/middleware').requireCurrentUser
 
-commentsRouter.post('/', async (request, response, next) => {
+commentsRouter.post('/', requireCurrentUser, async (request, response, next) => {
   const { body, params } = request
 
   const comment = new Comment({

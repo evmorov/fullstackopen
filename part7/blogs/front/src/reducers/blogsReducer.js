@@ -42,8 +42,9 @@ const reducer = (state = initialState, action) => {
 }
 
 export const getBlogs = () => {
-  return async (dispatch) => {
-    const blogs = await new BlogService().getAll()
+  return async (dispatch, getState) => {
+    const { token } = getState().currentUser
+    const blogs = await new BlogService(token).getAll()
     dispatch({
       type: 'INIT_BLOGS',
       data: blogs,

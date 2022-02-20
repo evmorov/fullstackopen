@@ -14,7 +14,7 @@ export default class BlogService {
   }
 
   async getAll() {
-    const request = axios.get(BLOGS_BASE_URL)
+    const request = axios.get(BLOGS_BASE_URL, this.authHeaders())
     return request.then((response) => response.data)
   }
 
