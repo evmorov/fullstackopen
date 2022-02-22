@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouteMatch } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { Form, Button } from 'react-bootstrap'
 import { createComment } from './../reducers/commentsReducer'
 
 const CommentForm = () => {
@@ -27,16 +28,20 @@ const CommentForm = () => {
 
   return (
     <div>
-      <form onSubmit={addComment}>
-        <input
-          type="text"
-          value={text}
-          name="text"
-          autoComplete="commenttext"
-          onChange={({ target }) => setText(target.value)}
-        />{' '}
-        <button type="submit">Add comment</button>
-      </form>
+      <Form onSubmit={addComment}>
+        <Form.Group>
+          <Form.Control
+            type="text"
+            value={text}
+            name="text"
+            autoComplete="commenttext"
+            onChange={({ target }) => setText(target.value)}
+          />
+          <Button type="submit" variant="primary" style={{ marginTop: 10, marginBottom: 10 }}>
+            Add comment
+          </Button>
+        </Form.Group>
+      </Form>
     </div>
   )
 }

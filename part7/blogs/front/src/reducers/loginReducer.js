@@ -25,7 +25,7 @@ export const login = (username, password) => {
       window.localStorage.setItem('currentUser', JSON.stringify(currentUser))
       dispatch({ type: 'LOGIN', data: currentUser })
       dispatch(getBlogs())
-      dispatch(showNotification({ message: 'Successfully logged in', kind: 'info', seconds: 3 }))
+      dispatch(showNotification({ message: 'Successfully logged in', kind: 'success', seconds: 3 }))
     } catch (exception) {
       handleException(exception, dispatch)
     }
@@ -47,14 +47,14 @@ export const logout = () => {
   return async (dispatch) => {
     window.localStorage.clear()
     dispatch({ type: 'LOGOUT' })
-    dispatch(showNotification({ message: 'Successfully logged out', kind: 'info', seconds: 3 }))
+    dispatch(showNotification({ message: 'Successfully logged out', kind: 'success', seconds: 3 }))
   }
 }
 
 const handleException = (exception, dispatch) => {
   if (exception.response) {
     const message = exception.response.data.error
-    dispatch(showNotification({ message: message, kind: 'error', seconds: 4 }))
+    dispatch(showNotification({ message: message, kind: 'danger', seconds: 4 }))
   } else {
     console.error(exception)
   }

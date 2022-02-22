@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { Table } from 'react-bootstrap'
 import Togglable from './Togglable'
 import BlogForm from './BlogForm'
 
@@ -12,27 +13,30 @@ const Blogs = () => {
 
   return (
     <div>
-      <Togglable
-        showLabel="New blog"
-        hideLabel="Cancel"
-        hidePosition="bottom"
-        ref={toggleBlogFormRef}
-      >
-        <BlogForm toggleBlogFormRef={toggleBlogFormRef} />
-      </Togglable>
-
-      <br />
+      <div style={{ marginTop: 10, marginBottom: 10 }}>
+        <Togglable
+          showLabel="New blog"
+          hideLabel="Cancel"
+          hidePosition="bottom"
+          ref={toggleBlogFormRef}
+        >
+          <BlogForm toggleBlogFormRef={toggleBlogFormRef} />
+        </Togglable>
+      </div>
 
       <h2>List</h2>
-      <div data-test="blog-list">
-        {sortedBlogs.map((blog) => (
-          <Link to={`/blogs/${blog.id}`} key={blog.id}>
-            <div>
-              {blog.title}, {blog.author}
-            </div>
-          </Link>
-        ))}
-      </div>
+      <Table striped hover data-test="blog-list">
+        <tbody>
+          {sortedBlogs.map((blog) => (
+            <tr key={blog.id}>
+              <td>
+                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+              </td>
+              <td className="text-end">{blog.author}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </div>
   )
 }

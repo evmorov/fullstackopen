@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { Form, Button } from 'react-bootstrap'
 import { login } from './../reducers/loginReducer'
 
 const LoginForm = () => {
@@ -15,32 +16,32 @@ const LoginForm = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div>
-          Username{' '}
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            autoComplete="username"
-            data-test="username-input"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          Password{' '}
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            autoComplete="current-password"
-            data-test="password-input"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <br />
-        <button type="submit" data-test="login-button">
+        <Form.Label>Username</Form.Label>
+        <Form.Control
+          type="text"
+          value={username}
+          name="Username"
+          autoComplete="username"
+          data-test="username-input"
+          onChange={({ target }) => setUsername(target.value)}
+        />
+        <Form.Label>Password</Form.Label>
+        <Form.Control
+          type="password"
+          value={password}
+          name="Password"
+          autoComplete="current-password"
+          data-test="password-input"
+          onChange={({ target }) => setPassword(target.value)}
+        />
+        <Button
+          variant="primary"
+          style={{ marginTop: 10, marginBottom: 10 }}
+          type="submit"
+          data-test="login-button"
+        >
           Login
-        </button>
+        </Button>
       </form>
     </div>
   )

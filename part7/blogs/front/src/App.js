@@ -19,7 +19,7 @@ const App = () => {
   }, [])
 
   return (
-    <>
+    <div className="container">
       {currentUser ? (
         <>
           <Menu />
@@ -49,7 +49,7 @@ const App = () => {
           <LoginForm />
         </>
       )}
-    </>
+    </div>
   )
 }
 

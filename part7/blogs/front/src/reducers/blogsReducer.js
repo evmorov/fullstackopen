@@ -44,11 +44,15 @@ const reducer = (state = initialState, action) => {
 export const getBlogs = () => {
   return async (dispatch, getState) => {
     const { token } = getState().currentUser
-    const blogs = await new BlogService(token).getAll()
-    dispatch({
-      type: 'INIT_BLOGS',
-      data: blogs,
-    })
+    try {
+      const blogs = await new BlogService(token).getAll()
+      dispatch({
+        type: 'INIT_BLOGS',
+        data: blogs,
+      })
+    } catch (exception) {
+      handleException(exception, dispatch)
+    }
   }
 }
 
@@ -60,7 +64,7 @@ export const createBlog = (blog) => {
       dispatch({ type: 'CREATE_BLOG', data: newBlog })
 
       const message = `A new blog ${getState().blogs.entryRespond.title} created`
-      dispatch(showNotification({ message: message, kind: 'info', seconds: 3 }))
+      dispatch(showNotification({ message: message, kind: 'success', seconds: 3 }))
     } catch (exception) {
       handleException(exception, dispatch)
     }
@@ -87,7 +91,7 @@ export const destroyBlog = (blog) => {
       dispatch({ type: 'DESTROY_BLOG', data: blog })
 
       const message = `Blog ${blog.title} has been removed`
-      dispatch(showNotification({ message: message, kind: 'info', seconds: 3 }))
+      dispatch(showNotification({ message: message, kind: 'success', seconds: 3 }))
     } catch (exception) {
       handleException(exception, dispatch)
     }
@@ -97,7 +101,7 @@ export const destroyBlog = (blog) => {
 const handleException = (exception, dispatch) => {
   if (exception.response) {
     const message = exception.response.data.error
-    dispatch(showNotification({ message: message, kind: 'error', seconds: 4 }))
+    dispatch(showNotification({ message: message, kind: 'danger', seconds: 4 }))
   } else {
     console.error(exception)
   }

@@ -1,5 +1,6 @@
 import React from 'react'
 import CommentForm from './CommentForm'
+import { ListGroup } from 'react-bootstrap'
 
 const Comments = ({ comments }) => {
   return (
@@ -8,11 +9,11 @@ const Comments = ({ comments }) => {
 
       <CommentForm />
 
-      <ul>
+      <ListGroup>
         {comments.map((comment) => (
-          <li key={comment.id}>{comment.text}</li>
+          <ListGroup.Item key={comment.id}>{comment.text}</ListGroup.Item>
         ))}
-      </ul>
+      </ListGroup>
     </div>
   )
 }

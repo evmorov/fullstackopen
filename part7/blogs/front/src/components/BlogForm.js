@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Form, Button } from 'react-bootstrap'
 import { createBlog } from './../reducers/blogsReducer'
 
 const BlogForm = ({ toggleBlogFormRef }) => {
@@ -34,10 +35,10 @@ const BlogForm = ({ toggleBlogFormRef }) => {
   return (
     <div>
       <h3>New blog</h3>
-      <form onSubmit={addBlog}>
-        <div>
-          Title{' '}
-          <input
+      <Form onSubmit={addBlog}>
+        <Form.Group>
+          <Form.Label>Title</Form.Label>
+          <Form.Control
             type="text"
             value={blogTitle}
             name="BlogTitle"
@@ -45,10 +46,8 @@ const BlogForm = ({ toggleBlogFormRef }) => {
             data-test="blog-title-input"
             onChange={({ target }) => setBlogTitle(target.value)}
           />
-        </div>
-        <div>
-          Author{' '}
-          <input
+          <Form.Label>Author</Form.Label>
+          <Form.Control
             type="text"
             value={blogAuthor}
             name="BlogAuthor"
@@ -56,10 +55,8 @@ const BlogForm = ({ toggleBlogFormRef }) => {
             data-test="blog-author-input"
             onChange={({ target }) => setBlogAuthor(target.value)}
           />
-        </div>
-        <div>
-          URL{' '}
-          <input
+          <Form.Label>URL</Form.Label>
+          <Form.Control
             type="text"
             value={blogUrl}
             name="BlogUrl"
@@ -67,14 +64,16 @@ const BlogForm = ({ toggleBlogFormRef }) => {
             data-test="blog-url-input"
             onChange={({ target }) => setBlogUrl(target.value)}
           />
-        </div>
-        <br />
-        <div>
-          <button type="submit" data-test="blog-create-button">
+          <Button
+            variant="primary"
+            type="submit"
+            style={{ marginTop: 10, marginBottom: 10 }}
+            data-test="blog-create-button"
+          >
             Create
-          </button>
-        </div>
-      </form>
+          </Button>
+        </Form.Group>
+      </Form>
     </div>
   )
 }

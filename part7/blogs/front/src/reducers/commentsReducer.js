@@ -36,7 +36,7 @@ export const createComment = (comment, blog) => {
 const handleException = (exception, dispatch) => {
   if (exception.response) {
     const message = exception.response.data.error
-    dispatch(showNotification({ message: message, kind: 'error', seconds: 4 }))
+    dispatch(showNotification({ message: message, kind: 'danger', seconds: 4 }))
   } else {
     console.error(exception)
   }

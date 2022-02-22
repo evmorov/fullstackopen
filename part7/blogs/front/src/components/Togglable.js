@@ -1,4 +1,5 @@
 import React, { useState, useImperativeHandle } from 'react'
+import { Button } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
 const Togglable = React.forwardRef(({ showLabel, hideLabel, children, hidePosition }, ref) => {
@@ -22,7 +23,11 @@ const Togglable = React.forwardRef(({ showLabel, hideLabel, children, hidePositi
     }
   })
 
-  const hideLabelButton = <button onClick={toggleVisibility}>{hideLabel}</button>
+  const hideLabelButton = (
+    <Button onClick={toggleVisibility} variant="secondary">
+      {hideLabel}
+    </Button>
+  )
 
   let showSection = null
 
@@ -55,9 +60,9 @@ const Togglable = React.forwardRef(({ showLabel, hideLabel, children, hidePositi
   return (
     <>
       <span style={hideWhenVisible}>
-        <button data-test="toggle-button" onClick={toggleVisibility}>
+        <Button data-test="toggle-button" onClick={toggleVisibility}>
           {showLabel}
-        </button>
+        </Button>
       </span>
       <span style={showWhenVisible}>{showSection}</span>
     </>

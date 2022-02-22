@@ -1,6 +1,7 @@
 import React from 'react'
 import { useRouteMatch, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { Button } from 'react-bootstrap'
 import { updateBlog, destroyBlog } from './../reducers/blogsReducer'
 import Comments from './Comments'
 
@@ -43,22 +44,18 @@ const Blog = () => {
         {title}, {author}
       </h2>
 
-      <div>
-        <div>
-          <a rel="noopener noreferrer" href={url} target="_blank">
-            {url}
-          </a>
-        </div>
+      <div style={{ marginBottom: 10 }}>
+        <a rel="noopener noreferrer" href={url} target="_blank">
+          {url}
+        </a>
         <span data-test="blog-likes">Likes: {likes}</span>
         <button style={likeButtonStyle} data-test="blog-like-button" onClick={handleLike}>
           👍
         </button>
         <div>Added by {user.name}</div>
-      </div>
-      <div>
-        <button onClick={handleRemove} data-test="blog-remove-button">
+        <Button onClick={handleRemove} variant="danger" data-test="blog-remove-button">
           Remove
-        </button>
+        </Button>
       </div>
 
       <Comments comments={comments} />
