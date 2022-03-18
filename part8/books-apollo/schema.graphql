@@ -1,0 +1,6 @@
+# eslint-disable @graphql-eslint/executable-definitions
+
+type Query {
+  bookCount: Int!
+  authorCount: Int!
+}
