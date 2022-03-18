@@ -94,6 +94,9 @@ const resolvers = {
     authorCount: () => {
       return authors.length
     },
+    allBooks: () => {
+      return books
+    },
   },
 }
 

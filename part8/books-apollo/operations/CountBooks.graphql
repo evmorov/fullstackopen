@@ -1,4 +1,4 @@
-query Count {
+query CountBooks {
   bookCount
   authorCount
 }
