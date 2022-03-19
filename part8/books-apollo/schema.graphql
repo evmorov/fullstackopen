@@ -8,8 +8,16 @@ type Book {
   genres: [String]!
 }
 
+type Author {
+  id: ID!
+  name: String!
+  born: Int!
+  bookCount: Int
+}
+
 type Query {
   bookCount: Int!
   authorCount: Int!
   allBooks: [Book!]!
+  allAuthors: [Author!]!
 }
