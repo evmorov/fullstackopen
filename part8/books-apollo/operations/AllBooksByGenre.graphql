@@ -1,0 +1,6 @@
+query {
+  allBooks(genre: "refactoring") {
+    title
+    author
+  }
+}

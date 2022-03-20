@@ -95,11 +95,14 @@ const resolvers = {
       return authors.length
     },
     allBooks: (root, args) => {
-      const author = args.author
-      if (author) {
-        return books.filter((book) => book.author === author)
+      let allBooks = books
+      if (args.author) {
+        allBooks = books.filter((book) => book.author === args.author)
       }
-      return books
+      if (args.genre) {
+        allBooks = allBooks.filter((book) => book.genres.includes(args.genre))
+      }
+      return allBooks
     },
     allAuthors: () => {
       return authors
