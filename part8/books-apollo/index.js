@@ -1,6 +1,6 @@
 const { ApolloServer } = require('apollo-server')
-const { readFileSync } = require('fs')
 const { v1: uuid } = require('uuid')
+const { readFileSync } = require('fs')
 const typeDefs = readFileSync('./schema.graphql').toString('utf-8')
 
 let authors = [
