@@ -135,9 +135,24 @@ const resolvers = {
   },
 }
 
+const basicLogging = {
+  requestDidStart(requestContext) {
+    console.log('')
+    console.log(new Date())
+    console.log(requestContext.request.query)
+    console.log(requestContext.request.variables)
+    return {
+      didEncounterErrors(requestContext) {
+        console.log(requestContext.errors)
+      },
+    }
+  },
+}
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  plugins: [basicLogging],
 })
 
 server.listen().then(({ url }) => {
