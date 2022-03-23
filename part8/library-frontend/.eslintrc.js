@@ -13,7 +13,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['react', 'jest'],
+  plugins: ['react', 'jest', '@graphql-eslint'],
   rules: {
     indent: ['error', 2, { SwitchCase: 1 }],
     'linebreak-style': ['error', 'unix'],
@@ -31,4 +31,25 @@ module.exports = {
       version: 'detect',
     },
   },
+  overrides: [
+    {
+      files: ['*.graphql'],
+      extends: [
+        'plugin:@graphql-eslint/schema-recommended',
+        'plugin:@graphql-eslint/operations-recommended',
+      ],
+      parserOptions: {
+        schema: './../books-apollo/schema.graphql',
+      },
+      rules: {
+        '@graphql-eslint/require-description': 'off',
+        '@graphql-eslint/strict-id-in-types': 'off',
+        '@graphql-eslint/no-anonymous-operations': 'off',
+        '@graphql-eslint/require-id-when-available': 'off',
+        '@graphql-eslint/naming-convention': 'off',
+        '@graphql-eslint/no-unused-fragments': 'off',
+        '@graphql-eslint/selection-set-depth': 'off',
+      },
+    },
+  ],
 }
