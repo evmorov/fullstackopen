@@ -1,6 +1,7 @@
-query {
-  allBooks(author: "Robert Martin", genre: "refactoring") {
+# '{ "nameToSearch": "Fyodor Dostoevsky", "genre": "refactoring" }'
+
+query allBooks($nameToSearch: String!, $genre: String!) {
+  allBooks(author: $nameToSearch, genre: $genre) {
     title
-    author
   }
 }

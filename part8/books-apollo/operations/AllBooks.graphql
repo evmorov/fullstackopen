@@ -2,8 +2,10 @@ query {
   allBooks {
     id
     title
-    author
     published
     genres
+    author {
+      name
+    }
   }
 }

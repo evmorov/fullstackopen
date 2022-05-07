@@ -2,6 +2,7 @@ query {
   allAuthors {
     id
     name
+    born
     bookCount
   }
 }

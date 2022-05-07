@@ -1,6 +1,7 @@
-query {
-  allBooks(genre: "refactoring") {
+# '{ "genre": "refactoring" }'
+
+query allBooks($genre: String!) {
+  allBooks(genre: $genre) {
     title
-    author
   }
 }

@@ -1,11 +1,10 @@
-mutation {
-  addBook(
-    title: "NoSQL Distilled"
-    author: "Martin Fowler"
-    published: 2012
-    genres: ["database", "nosql"]
-  ) {
+# '{ "title": "MyTitle", "author": "Fyodor Dostoevsky", "published": 2022, "genres": ["aaa", "bbb"]}'
+
+mutation addBook($title: String!, $author: String!, $published: Int!, $genres: [String!]!) {
+  addBook(title: $title, author: $author, published: $published, genres: $genres) {
     title
-    author
+    author {
+      name
+    }
   }
 }

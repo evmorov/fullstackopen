@@ -4,6 +4,9 @@ set -e
 gql="`cat $(dirname "$0")/$1`"
 variables=$([ -z "$2" ] && echo "{}" || echo "$2")
 
+# remove comments
+gql=$(sed -r '/^[ \t]*#/d' <<<"$gql")
+
 # escape "
 gql="${gql//\"/\\\"}"
 variables="${variables//\"/\\\"}"

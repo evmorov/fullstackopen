@@ -1,3 +1,5 @@
+# '{ "nameToSearch": "Fyodor Dostoevsky" }'
+
 query allBooks($nameToSearch: String!) {
   allBooks(author: $nameToSearch) {
     title
