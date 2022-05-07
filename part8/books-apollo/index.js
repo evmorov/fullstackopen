@@ -1,4 +1,4 @@
-const { ApolloServer } = require('apollo-server')
+const { ApolloServer, UserInputError } = require('apollo-server')
 const { readFileSync } = require('fs')
 const mongoose = require('mongoose')
 const config = require('./utils/config')
@@ -45,17 +45,32 @@ const resolvers = {
     addBook: async (root, args) => {
       const authorName = args.author
       let author = await Author.findOne({ name: authorName })
-      author ||= await new Author({ name: authorName }).save()
+      try {
+        author ||= await new Author({ name: authorName }).save()
+      } catch (error) {
+        throw new UserInputError(error.message, { invalidArgs: args })
+      }
+
       const book = new Book({ ...args })
       book.author = author
-      return book.save()
+      try {
+        await book.save()
+      } catch (error) {
+        throw new UserInputError(error.message, { invalidArgs: args })
+      }
+      return book
     },
     editAuthor: async (root, args) => {
       const author = await Author.findOne({ name: args.name })
       if (!author) return null
       author.name = args.name
       author.born = args.setBornTo
-      return author.save()
+      try {
+        await author.save()
+      } catch (error) {
+        throw new UserInputError(error.message, { invalidArgs: args })
+      }
+      return author
     },
   },
 }
