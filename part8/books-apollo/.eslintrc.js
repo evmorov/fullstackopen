@@ -25,6 +25,7 @@ module.exports = {
         '@graphql-eslint/no-anonymous-operations': 'off',
         '@graphql-eslint/require-id-when-available': 'off',
         '@graphql-eslint/naming-convention': 'off',
+        '@graphql-eslint/no-typename-prefix': 'off',
       },
     },
   ],

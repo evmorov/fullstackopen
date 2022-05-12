@@ -1,0 +1,7 @@
+# '{ "username": "evmorov", "favoriteGenre": "refactoring" }'
+
+mutation createUser($username: String!, $favoriteGenre: String!) {
+  createUser(username: $username, favoriteGenre: $favoriteGenre) {
+    username
+  }
+}
