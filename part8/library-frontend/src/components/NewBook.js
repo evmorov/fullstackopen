@@ -37,6 +37,8 @@ const NewBook = (props) => {
 
   return (
     <div>
+      <h2>New book</h2>
+
       <form onSubmit={submit}>
         <div>
           Title
