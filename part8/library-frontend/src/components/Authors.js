@@ -3,8 +3,8 @@ import { useQuery } from '@apollo/client'
 import EditBirthyear from './EditBirthyear'
 import { ALL_AUTHORS } from './queries'
 
-const Authors = (props) => {
-  if (!props.show) {
+const Authors = ({ show, loggedIn }) => {
+  if (!show) {
     return null
   }
 
@@ -35,7 +35,7 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <EditBirthyear />
+      {loggedIn && <EditBirthyear />}
     </div>
   )
 }

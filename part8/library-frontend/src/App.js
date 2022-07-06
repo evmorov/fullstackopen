@@ -44,7 +44,7 @@ const App = () => {
         )}
       </div>
 
-      <Authors show={page === 'authors'} />
+      <Authors show={page === 'authors'} loggedIn={!!token} />
       <Books show={page === 'books'} />
       <NewBook show={page === 'add'} />
       <Login show={page === 'login'} loginSuccess={loginSuccess} />
