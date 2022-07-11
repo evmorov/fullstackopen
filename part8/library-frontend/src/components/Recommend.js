@@ -7,22 +7,24 @@ const Recommend = ({ show }) => {
     return null
   }
 
-  const allBooksResult = useQuery(ALL_BOOKS)
-  const meResult = useQuery(ME)
+  const { meLoading, data: { me: { favoriteGenre } = {} } = {} } = useQuery(ME)
+  const allBooksResult = useQuery(ALL_BOOKS, {
+    skip: meLoading,
+    variables: { genre: favoriteGenre },
+  })
 
-  if (allBooksResult.loading || meResult.loading) {
+  if (meLoading || allBooksResult.loading) {
     return <div>Loading...</div>
   }
 
   const books = allBooksResult.data.allBooks
-  const genre = meResult.data.me.favoriteGenre
 
   return (
     <div>
       <h2>Recommendation</h2>
 
       <p>
-        Books in your favorite genre <strong>{genre}</strong>
+        Books in your favorite genre <strong>{favoriteGenre}</strong>
       </p>
 
       <table>
@@ -33,16 +35,14 @@ const Recommend = ({ show }) => {
             <th>Published</th>
             <th>Genres</th>
           </tr>
-          {books
-            .filter((b) => b.genres.includes(genre))
-            .map((b) => (
-              <tr key={b.id}>
-                <td>{b.title}</td>
-                <td>{b.author.name}</td>
-                <td>{b.published}</td>
-                <td>{b.genres.join(', ')}</td>
-              </tr>
-            ))}
+          {books.map((b) => (
+            <tr key={b.id}>
+              <td>{b.title}</td>
+              <td>{b.author.name}</td>
+              <td>{b.published}</td>
+              <td>{b.genres.join(', ')}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
