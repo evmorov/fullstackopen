@@ -1,20 +1,21 @@
 import React from 'react'
 import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from './queries'
+import { ALL_BOOKS, ME } from './queries'
 
 const Recommend = ({ show }) => {
   if (!show) {
     return null
   }
 
-  const result = useQuery(ALL_BOOKS)
+  const allBooksResult = useQuery(ALL_BOOKS)
+  const meResult = useQuery(ME)
 
-  if (result.loading) {
+  if (allBooksResult.loading || meResult.loading) {
     return <div>Loading...</div>
   }
 
-  const books = result.data.allBooks
-  const genre = 'refactoring'
+  const books = allBooksResult.data.allBooks
+  const genre = meResult.data.me.favoriteGenre
 
   return (
     <div>
