@@ -39,7 +39,7 @@ module.exports = {
         'plugin:@graphql-eslint/operations-recommended',
       ],
       parserOptions: {
-        schema: './../books-apollo/schema.graphql',
+        schema: './schema.graphql',
       },
       rules: {
         '@graphql-eslint/require-description': 'off',
@@ -49,6 +49,7 @@ module.exports = {
         '@graphql-eslint/naming-convention': 'off',
         '@graphql-eslint/no-unused-fragments': 'off',
         '@graphql-eslint/selection-set-depth': 'off',
+        '@graphql-eslint/no-typename-prefix': 'off',
       },
     },
   ],
