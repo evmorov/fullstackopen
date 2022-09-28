@@ -5,7 +5,25 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import Recommend from './components/Recommend'
 import Login from './components/Login'
-import { BOOK_ADDED } from './components/queries'
+import { ALL_BOOKS, BOOK_ADDED } from './components/queries'
+
+export const updateBookCache = (cache, addedBook, genres) => {
+  const uniqByTitle = (books) => {
+    let seen = new Set()
+    return books.filter(({ title }) => {
+      return seen.has(title) ? false : seen.add(title)
+    })
+  }
+
+  const allGenre = null
+  genres.concat(allGenre).forEach((genre) => {
+    cache.updateQuery({ query: ALL_BOOKS, variables: { genre } }, (cacheResult) => {
+      if (!cacheResult) return
+      const allBooksUpdated = uniqByTitle(cacheResult.allBooks.concat(addedBook))
+      return { allBooks: allBooksUpdated }
+    })
+  })
+}
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -19,7 +37,8 @@ const App = () => {
 
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
-      window.alert(subscriptionData.data.bookAdded.title)
+      const addedBook = subscriptionData.data.bookAdded
+      updateBookCache(client.cache, addedBook, addedBook.genres)
     },
   })
 
