@@ -20,7 +20,6 @@ module.exports = {
     quotes: ['error', 'single', { avoidEscape: true }],
     semi: ['error', 'never'],
     eqeqeq: 'error',
-    'no-trailing-spaces': 'error',
     'object-curly-spacing': ['error', 'always'],
     'arrow-spacing': ['error', { before: true, after: true }],
     'no-console': 0,
@@ -40,6 +39,7 @@ module.exports = {
       ],
       parserOptions: {
         schema: './schema.graphql',
+        operations: './src/components/queries.js',
       },
       rules: {
         '@graphql-eslint/require-description': 'off',
