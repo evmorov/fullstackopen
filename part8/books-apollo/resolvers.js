@@ -10,8 +10,9 @@ const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
 
 const resolvers = {
   Author: {
-    bookCount: async (root) => {
-      return await Book.count({ author: root._id })
+    bookCount: async (root, args, { booksLoader }) => {
+      const books = await booksLoader.load(root.id)
+      return books.length
     },
   },
 
@@ -53,6 +54,8 @@ const resolvers = {
   Mutation: {
     addBook: async (root, args, context) => {
       if (!context.currentUser) throw new UserInputError('Authenticated users only')
+
+      context.booksLoader.clearAll()
 
       const authorName = args.author
       let author = await Author.findOne({ name: authorName })

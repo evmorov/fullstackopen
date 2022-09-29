@@ -6,11 +6,13 @@ const http = require('http')
 const { readFileSync } = require('fs')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
+const DataLoader = require('dataloader')
 const config = require('./utils/config')
 const typeDefs = readFileSync('./schema.graphql').toString('utf-8')
 const { execute, subscribe } = require('graphql')
 const { SubscriptionServer } = require('subscriptions-transport-ws')
 const User = require('./models/user')
+const Book = require('./models/book')
 const resolvers = require('./resolvers')
 
 const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
@@ -27,6 +29,16 @@ mongoose
   })
 
 mongoose.set('debug', true)
+
+const batchBooks = async (authorsIds) => {
+  const books = await Book.find({ where: { authorId: authorsIds } })
+  const booksGroupedByAuthor = authorsIds.map((authorId) => {
+    return books.filter((book) => book.author == authorId)
+  })
+  return booksGroupedByAuthor
+}
+
+const booksLoader = new DataLoader((authorsIds) => batchBooks(authorsIds))
 
 const start = async () => {
   const app = express()
@@ -77,7 +89,7 @@ const start = async () => {
       if (auth && auth.toLowerCase().startsWith('bearer ')) {
         const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET)
         const currentUser = await User.findById(decodedToken.id)
-        return { currentUser }
+        return { currentUser, booksLoader }
       }
     },
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer }), basicLogging, subscriptionStart],
